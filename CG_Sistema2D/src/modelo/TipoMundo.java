@@ -17,7 +17,10 @@ public interface TipoMundo {
 	void incluirObjeto(TipoCoordenadas coordenadas,
 			TipoCoordenadas coordenadas2, Color cor);
 
-	void incluirObjeto(ArrayList<TipoCoordenadas> listCord, Color cor,
+	void incluirCurvaBezier(ArrayList<TipoCoordenadas> listCord, Color cor,
 			String numPontos);
+
+	void incluirCurvaSpline(ArrayList<TipoCoordenadas> listCord, Color color,
+			String text);
 
 }

@@ -13,6 +13,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 
 import modelo.Curvas;
@@ -36,6 +37,9 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 	private CtrlBezier ctrlBezier;
 	private JColorChooser corChooser;
 
+	public CtrlCriarCurva() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -43,11 +47,10 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 		criarCurva();
 	}
 
-
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		if(arg0.getKeyCode()==10)
+		if (arg0.getKeyCode() == 10)
 			criarCurva();
 
 	}
@@ -63,26 +66,58 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 
 	}
+
 	private void criarCurva() {
 		// TODO Auto-generated method stub
-		if(InterfaceGrafica.getInstance().algoCurvas().equals(Curvas.BEZIER)){
+		if (InterfaceGrafica.getInstance().algoCurvas().equals(Curvas.BEZIER)) {
 			curvaBezier();
+		} else {
+			curvaSpline();
 		}
 	}
 
+	private void curvaSpline() {
+		// TODO Auto-generated method stub
+		System.out.println("Criando curva B-Spline");
+
+		frame = new JFrame();
+		frame.setLayout(new FlowLayout());
+		frame.setSize(650, 475);
+		frame.setTitle("Criar Curva");
+
+		// pnlPrincipal = new JPanel();
+		// pnlControle = new JPanel();
+		// pnlControle.setLayout(new GridLayout(5, 3));
+
+		corChooser = new JColorChooser(Color.WHITE);
+
+		frame.add(corChooser);
+
+		// 1. Obter número de pontos de controle: m
+
+		JSlider m = new JSlider(3, 50, 25);
+		m.setMajorTickSpacing(15);
+		m.setMinorTickSpacing(1);
+		m.setPaintTicks(true);
+		m.setPaintLabels(true);
+		frame.add(m);
+		// 2. Determinar os m-2 segmentos cúbicos Q
+
+		frame.setVisible(true);
+	}
 
 	private void curvaBezier() {
 		// TODO Auto-generated method stub
 		frame = new JFrame();
 		frame.setLayout(new FlowLayout());
 		frame.setSize(650, 475);
-		frame.setTitle("Criar Objeto");
+		frame.setTitle("Criar Curva");
 
 		pnlPrincipal = new JPanel();
-		
+
 		pnlControle = new JPanel();
 		pnlControle.setLayout(new GridLayout(5, 3));
-		
+
 		corChooser = new JColorChooser(Color.WHITE);
 
 		pX1 = new JTextField();
@@ -109,20 +144,20 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 		pnlControle.add(pY4);
 		pnlControle.add(new JLabel("Pontos na curva"));
 		pnlControle.add(numPontos);
-		
-		ctrlBezier = new CtrlBezier(frame, pX1, pX2, pX3, pX4, pX1, pX2, pX3, pX4, pY1, pY2, pY3, pY4, numPontos, corChooser);
+
+		ctrlBezier = new CtrlBezier(frame, pX1, pX2, pX3, pX4, pX1, pX2, pX3,
+				pX4, pY1, pY2, pY3, pY4, numPontos, corChooser);
 		btCurva = new JButton("Criar");
 		btCurva.addActionListener(ctrlBezier);
 		btCurva.addKeyListener(ctrlBezier);
-		
+
 		pnlPrincipal.add(pnlControle);
-		//pnlPrincipal.add(btCurva);
-		
+		// pnlPrincipal.add(btCurva);
+
 		frame.add(pnlControle);
 		frame.add(corChooser);
 		frame.add(btCurva);
 		frame.setVisible(true);
-		
 
 	}
 

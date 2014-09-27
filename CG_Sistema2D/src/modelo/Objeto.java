@@ -1,6 +1,8 @@
 package modelo;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 
 public abstract class Objeto implements TipoObjeto {
@@ -376,13 +378,14 @@ public abstract class Objeto implements TipoObjeto {
 
 	}
 
-	public static TipoObjeto criarCurva(String nome,
+	public static TipoObjeto criarCurvaBezier(String nome,
 			ArrayList<TipoCoordenadas> listCord, Color cor2, String numPontos) {
 		// TODO Auto-generated method stub
 		ArrayList<TipoCoordenadas> novaListCoord = new ArrayList<TipoCoordenadas>();
-		double limite = (1.0/ Double.parseDouble(numPontos));
-		novaListCoord.add(new CoordenadasNorm(listCord.get(0).getXD(), listCord.get(0).getYD(), 1));
-		for (double i = limite; i <= 1+limite; i = (i+limite)) {
+		double limite = (1.0 / Double.parseDouble(numPontos));
+		novaListCoord.add(new CoordenadasNorm(listCord.get(0).getXD(), listCord
+				.get(0).getYD(), 1));
+		for (double i = limite; i <= 1 + limite; i = (i + limite)) {
 			// px=(1-t).^3*x(1)+3*t.*(1-t).^2*x(2)+3*t.^2.*(1-t)*x(3)+t.^3*x(4);
 			double pX = Math.pow((1 - i), 3) * listCord.get(0).getXD() + 3 * i
 					* Math.pow((1 - i), 2) * listCord.get(1).getXD() + 3
@@ -395,14 +398,16 @@ public abstract class Objeto implements TipoObjeto {
 			novaListCoord.add(new CoordenadasNorm(pX, pY, 1));
 		}
 		TipoObjeto c = new Curva(nome, novaListCoord, cor2);
-		c.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela.getInstance().centroWin());
+		c.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
+				.getInstance().centroWin());
 		return c;
+	}
 
-		/*
-		 * // TODO Auto-generated method stub
-		 * TipoObjeto o = new Poligono(nome, listCord, cor, preenchido);
-		 * o.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela.getInstance().centroWin()); 
-		 *  return o;
-		 */
+	public static TipoObjeto criarCurvaSpline(String nome,
+			ArrayList<TipoCoordenadas> listCord, Color cor2, String numPontos) {
+		// TODO Auto-generated method stub
+		
+		
+		return null;
 	}
 }

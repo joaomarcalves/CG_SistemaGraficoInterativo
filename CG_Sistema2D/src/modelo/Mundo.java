@@ -72,11 +72,18 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto(ArrayList<TipoCoordenadas> listCord, Color cor,
+	public void incluirCurvaBezier(ArrayList<TipoCoordenadas> listCord, Color cor,
 			String numPontos) {
 		// TODO Auto-generated method stub
 		quantCurv++;
-		displayFile.add(Objeto.criarCurva(("C"+quantCurv), listCord, cor, numPontos));
+		displayFile.add(Objeto.criarCurvaBezier(("C"+quantCurv), listCord, cor, numPontos));
+		
+	}
+	public void incluirCurvaSpline(ArrayList<TipoCoordenadas> listCord, Color cor,
+			String numPontos) {
+		// TODO Auto-generated method stub
+		quantCurv++;
+		displayFile.add(Objeto.criarCurvaSpline(("C"+quantCurv), listCord, cor, numPontos));
 		
 	}
 }

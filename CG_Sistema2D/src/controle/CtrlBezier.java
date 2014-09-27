@@ -8,12 +8,13 @@ import java.util.ArrayList;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 
-import visao.InterfaceGrafica;
 import modelo.CoordenadasHomogeneas;
 import modelo.Mundo;
 import modelo.TipoCoordenadas;
+import visao.InterfaceGrafica;
 
 public class CtrlBezier implements KeyListener, ActionListener {
 
@@ -29,10 +30,11 @@ public class CtrlBezier implements KeyListener, ActionListener {
 	private JColorChooser corChooser;
 	private JFrame framePai;
 
-	public CtrlBezier(JFrame frame, JTextField pX1, JTextField pX2, JTextField pX3,
-			JTextField pX4, JTextField pX12, JTextField pX22, JTextField pX32,
-			JTextField pX42, JTextField pY1, JTextField pY2, JTextField pY3,
-			JTextField pY4, JTextField numPontos, JColorChooser corChooser) {
+	public CtrlBezier(JFrame frame, JTextField pX1, JTextField pX2,
+			JTextField pX3, JTextField pX4, JTextField pX12, JTextField pX22,
+			JTextField pX32, JTextField pX42, JTextField pY1, JTextField pY2,
+			JTextField pY3, JTextField pY4, JTextField numPontos,
+			JColorChooser corChooser) {
 		// TODO Auto-generated constructor stub
 		framePai = frame;
 		this.pX1 = pX1;
@@ -52,12 +54,19 @@ public class CtrlBezier implements KeyListener, ActionListener {
 		// TODO Auto-generated method stub
 		framePai.dispose();
 		ArrayList<TipoCoordenadas> listCord = new ArrayList<TipoCoordenadas>();
-		listCord.add(new CoordenadasHomogeneas(pX1.getText(), pY1.getText(), "1"));
-		listCord.add(new CoordenadasHomogeneas(pX2.getText(), pY2.getText(), "1"));
-		listCord.add(new CoordenadasHomogeneas(pX3.getText(), pY3.getText(), "1"));
-		listCord.add(new CoordenadasHomogeneas(pX4.getText(), pY4.getText(), "1"));
-		System.out.println("lol 1");
-		Mundo.getInstance().incluirObjeto(listCord, corChooser.getColor(), numPontos.getText());
+		listCord.add(new CoordenadasHomogeneas(pX1.getText(), pY1.getText(),
+				"1"));
+		listCord.add(new CoordenadasHomogeneas(pX2.getText(), pY2.getText(),
+				"1"));
+		listCord.add(new CoordenadasHomogeneas(pX3.getText(), pY3.getText(),
+				"1"));
+		listCord.add(new CoordenadasHomogeneas(pX4.getText(), pY4.getText(),
+				"1"));
+		System.out.println();
+
+		Mundo.getInstance().incluirCurvaBezier(listCord, corChooser.getColor(),
+				numPontos.getText());
+
 		InterfaceGrafica.getInstance().exibirObjetos();
 	}
 
