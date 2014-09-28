@@ -78,9 +78,10 @@ public class CanvasViewPort extends Canvas {
 						g.fillPolygon(xPoints, yPoints, xPoints.length);
 					}
 				}
-			} else {
+			} else if (clipping){
 				clipparCurvas(g, xPoints, yPoints);
-
+			}else{
+				g.drawPolyline(xPoints, yPoints, xPoints.length);
 			}
 			/*
 			 * switch (lC.size()) { case PONTO: clipparPonto(g, o, lC); break;

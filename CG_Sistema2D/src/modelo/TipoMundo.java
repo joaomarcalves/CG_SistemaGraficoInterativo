@@ -20,7 +20,6 @@ public interface TipoMundo {
 	void incluirCurvaBezier(ArrayList<TipoCoordenadas> listCord, Color cor,
 			String numPontos);
 
-	void incluirCurvaSpline(ArrayList<TipoCoordenadas> listCord, Color color,
-			String text);
+	void incluirCurvaSpline(ArrayList<SemiPonto> listCord, Color color);
 
 }

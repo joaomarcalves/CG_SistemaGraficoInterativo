@@ -1,12 +1,13 @@
 package modelo;
 
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.Polygon;
 import java.util.ArrayList;
+
+import Jama.Matrix;
 
 public abstract class Objeto implements TipoObjeto {
 
+	private static final int DIVISOES = 10;
 	private String nome;
 	private ArrayList<TipoCoordenadas> listaCoord;
 	private ArrayList<TipoCoordenadasNormalizada> listaCoordWin = new ArrayList<TipoCoordenadasNormalizada>();
@@ -404,10 +405,110 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarCurvaSpline(String nome,
-			ArrayList<TipoCoordenadas> listCord, Color cor2, String numPontos) {
+			ArrayList<SemiPonto> listaCamposDeCoordenadas, Color cor) {
 		// TODO Auto-generated method stub
+
+		ArrayList<TipoCoordenadas> listCoord = new ArrayList<TipoCoordenadas>();
+
+		for (SemiPonto semiPonto : listaCamposDeCoordenadas) {
+			listCoord.add(new CoordenadasNorm(Double.parseDouble(semiPonto
+					.gettFx().getText()), Double.parseDouble(semiPonto.gettFy()
+					.getText()), 1.0));
+		}
+		double[][] m = new double[4][3];
+		Matrix matrizGeo = new Matrix(m);
+		double[] f0 = new double[3];
+		double[] deltaF0 = new double[3];
+		double[] delta2F0 = new double[3];
+		double[] delta3F0 = new double[3];
+
+		double[][] g = { { -1.0 / 6.0, 3.0 / 6.0, -3.0 / 6.0, 1.0 / 6.0 },
+				{ 3.0 / 6.0, -1.0, 3.0 / 6.0, 0.0 },
+				{ -3.0 / 6.0, 0.0, 3.0 / 6.0, 0.0 },
+				{ 1.0 / 6.0, 4.0 / 6.0, 1.0 / 6.0, 0.0 } };
+		Matrix gbs = new Matrix(g);
+
+		ArrayList<TipoCoordenadas> ptsCurva = new ArrayList<TipoCoordenadas>();
+
+		for (int i = 0; i < listCoord.size() - 3; i++) {
+			for (int j = 0; j < matrizGeo.getRowDimension(); j++) {
+				matrizGeo.set(j, 0, listCoord.get(j + i).getXD());
+				matrizGeo.set(j, 1, listCoord.get(j + i).getYD());
+				matrizGeo.set(j, 2, listCoord.get(j + i).getZD());
+			}
+
+			Matrix coef = gbs.times(matrizGeo);
+			/*
+			 * System.out.println("matriz coef ::"); for (int p = 0; p <
+			 * coef.getRowDimension(); p++) { for (int d = 0; d <
+			 * coef.getColumnDimension(); d++) { System.out.println(coef.get(p,
+			 * d)); } } System.out.println("matriz coef ^^");
+			 */
+
+			double delta = (1.0 / DIVISOES);
+
+			for (int k = 0; k < 3; k++) {
+				f0[k] = coef.get(3, k);
+				deltaF0[k] = coef.get(0, k) * (Math.pow(delta, 3))
+						+ coef.get(1, k) * (Math.pow(delta, 2))
+						+ coef.get(2, k) * delta;
+				delta2F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3)) + 2
+						* coef.get(1, k) * (Math.pow(delta, 2));
+				delta3F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3));
+
+				
+			}
+
+			TipoCoordenadas p = listCoord.get(i);
+			ArrayList<TipoCoordenadas> ptsSegCurva = forwardDifrencies(p, f0,
+					deltaF0, delta2F0, delta3F0);
+
+			for (TipoCoordenadas c : ptsSegCurva) {
+				ptsCurva.add(c);
+			}
+		}
+		//
+
+		TipoObjeto c = new Curva(nome, ptsCurva, cor);
+		c.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
+				.getInstance().centroWin());
+		return c;
+	}
+
+	private static ArrayList<TipoCoordenadas> forwardDifrencies(
+			TipoCoordenadas coord, double[] f0, double[] deltaF0,
+			double[] delta2F0, double[] delta3F0) {
+		// TODO Auto-generated method stub
+
+		ArrayList<TipoCoordenadas> ptsCurva = new ArrayList<TipoCoordenadas>();
+
+		for (int i = 0; i < DIVISOES; i++) {
+			coord.setX(f0[0]);
+			coord.setY(f0[1]);
+			coord.setZ(1);
+
+			ptsCurva.add(new CoordenadasNorm(f0[0], f0[1], 1));
+			System.out.println("coord x: "+coord.getXD());
+			System.out.println("coord y: "+coord.getYD());
+
+
+			f0[0] += deltaF0[0];
+			deltaF0[0] += delta2F0[0];
+			delta2F0[0] += delta3F0[0];
+			f0[1] += deltaF0[1];
+			deltaF0[1] += delta2F0[1];
+			delta2F0[1] += delta3F0[1];
+			f0[2] += deltaF0[2];
+			deltaF0[2] += delta2F0[2];
+			delta3F0[2] += delta3F0[1];
+			
+		}
 		
+		for (TipoCoordenadas c : ptsCurva) {
+			System.out.println("pts curva x: "+c.getXD());
+			System.out.println("pts curva y: "+c.getYD());
+		}
 		
-		return null;
+		return ptsCurva;
 	}
 }

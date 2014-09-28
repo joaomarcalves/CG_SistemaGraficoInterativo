@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 
 import modelo.CoordenadasHomogeneas;

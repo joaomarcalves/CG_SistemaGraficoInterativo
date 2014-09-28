@@ -36,6 +36,7 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 	private JButton btCurva;
 	private CtrlBezier ctrlBezier;
 	private JColorChooser corChooser;
+	private CtrlSpline ctrlSpline;
 
 	public CtrlCriarCurva() {
 		// TODO Auto-generated constructor stub
@@ -82,27 +83,20 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 
 		frame = new JFrame();
 		frame.setLayout(new FlowLayout());
-		frame.setSize(650, 475);
+		frame.setSize(420, 120);
 		frame.setTitle("Criar Curva");
-
-		// pnlPrincipal = new JPanel();
-		// pnlControle = new JPanel();
-		// pnlControle.setLayout(new GridLayout(5, 3));
-
-		corChooser = new JColorChooser(Color.WHITE);
-
-		frame.add(corChooser);
-
-		// 1. Obter número de pontos de controle: m
-
-		JSlider m = new JSlider(3, 50, 25);
-		m.setMajorTickSpacing(15);
+		frame.add(new JLabel("Quantos pontos de controle você quer na curva?"));
+		
+		JSlider m = new JSlider(3, 18, 5);
+		m.setMajorTickSpacing(3);
 		m.setMinorTickSpacing(1);
 		m.setPaintTicks(true);
 		m.setPaintLabels(true);
+		ctrlSpline = new CtrlSpline(m, frame);
+		btCurva = new JButton("Criar B-Spline");
+		btCurva.addActionListener(ctrlSpline);
 		frame.add(m);
-		// 2. Determinar os m-2 segmentos cúbicos Q
-
+		frame.add(btCurva);
 		frame.setVisible(true);
 	}
 
@@ -114,7 +108,6 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 		frame.setTitle("Criar Curva");
 
 		pnlPrincipal = new JPanel();
-
 		pnlControle = new JPanel();
 		pnlControle.setLayout(new GridLayout(5, 3));
 

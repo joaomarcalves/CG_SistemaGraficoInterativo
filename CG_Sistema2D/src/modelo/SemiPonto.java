@@ -3,39 +3,42 @@ package modelo;
 import java.awt.Label;
 import java.awt.TextField;
 
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
 public class SemiPonto {
-	public SemiPonto(Label label, TextField textField, TextField textField2) {
+	private JLabel nome;
+	private JTextField tFx;
+	private JTextField tFy;
+
+	public SemiPonto(JLabel label, JTextField tfX, JTextField tfY) {
 		// TODO Auto-generated constructor stub
 		nome = label;
-		tFx = textField;
-		tFy = textField2;
+		tFx = tfX;
+		tFy = tfY;
 	}
 
-	private Label nome;
-	private TextField tFx;
-	private TextField tFy;
-
-	public Label getNome() {
+	public JLabel getNome() {
 		return nome;
 	}
 
-	public void setNome(Label nome) {
+	public void setNome(JLabel nome) {
 		this.nome = nome;
 	}
 
-	public TextField gettFx() {
+	public JTextField gettFx() {
 		return tFx;
 	}
 
-	public void settFx(TextField tFx) {
+	public void settFx(JTextField tFx) {
 		this.tFx = tFx;
 	}
 
-	public TextField gettFy() {
+	public JTextField gettFy() {
 		return tFy;
 	}
 
-	public void settFy(TextField tFy) {
+	public void settFy(JTextField tFy) {
 		this.tFy = tFy;
 	}
 }

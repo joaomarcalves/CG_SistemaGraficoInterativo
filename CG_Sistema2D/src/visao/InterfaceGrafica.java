@@ -162,7 +162,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		menuAlgCurva = new JMenu("Algorítmo de Curva");
 		menuBezier = new JRadioButtonMenuItem("Bézier");
 		menuBezier.setSelected(true);
-		menuSpline = new JRadioButtonMenuItem("Spline");
+		menuSpline = new JRadioButtonMenuItem("B-Spline");
 		ButtonGroup g1 = new ButtonGroup();
 		g1.add(menuLiangBarsky);
 		g1.add(menuCS);
