@@ -122,19 +122,23 @@ public class CanvasViewPort extends Canvas {
 						segmentosY.get(i), areaDesenhavel);
 				pontos = lB.cliparPoligono(g, clipping);
 				if (pontos != null) {
-					newX.add(pontos[0][0]);
-					newY.add(pontos[1][0]);
+					for (int j = 0; j < pontos[0].length; j++) {
+						newX.add(pontos[0][j]);
+						newY.add(pontos[1][j]);
+						System.out.println("pto x: "+pontos[0][j]);
+						System.out.println("pto y: "+pontos[1][j]);
+					}
 					g.drawPolygon(pontos[0], pontos[1], pontos[0].length); //
 				}
 			}
 		}
-		
-		System.out.println("qtos ptos? "+newX.size());
-		
-		int[] ptosX = new int [newX.size()*newX.size()];
-		int[] ptosY = new int [newX.size()*newX.size()];
 
-		for (int i = 0; i < ptosX.length; i++) {
+		System.out.println("qtos ptos? " + newX.size());
+
+		int[] ptosX = new int[newX.size() * newX.size()];
+		int[] ptosY = new int[newX.size() * newX.size()];
+
+		for (int i = 0; i < newX.size(); i++) {
 			ptosX[i] = newX.get(i);
 			ptosY[i] = newY.get(i);
 		}
