@@ -78,9 +78,9 @@ public class CanvasViewPort extends Canvas {
 						g.fillPolygon(xPoints, yPoints, xPoints.length);
 					}
 				}
-			} else if (clipping){
+			} else if (clipping) {
 				clipparCurvas(g, xPoints, yPoints);
-			}else{
+			} else {
 				g.drawPolyline(xPoints, yPoints, xPoints.length);
 			}
 			/*
@@ -98,6 +98,53 @@ public class CanvasViewPort extends Canvas {
 		// TODO Auto-generated method stub
 		System.out
 				.println("Fazendo Clipping da polígono usando o algoritmo de Liang Barsky");
+		ArrayList<int[]> segmentosX = new ArrayList<int[]>();
+		ArrayList<int[]> segmentosY = new ArrayList<int[]>();
+		for (int i = 0; i < xPoints.length; i++) {
+			if (i != (xPoints.length - 1)) {
+				int[] segmentoRetaX = { xPoints[i], xPoints[i + 1] };
+				int[] segmentoRetaY = { yPoints[i], yPoints[i + 1] };
+				segmentosX.add(segmentoRetaX);
+				segmentosY.add(segmentoRetaY);
+			} else {
+				int[] segmentoRetaX = { xPoints[i], xPoints[0] };
+				int[] segmentoRetaY = { yPoints[i], yPoints[0] };
+				segmentosX.add(segmentoRetaX);
+				segmentosY.add(segmentoRetaY);
+			}
+		}
+		int[][] pontos = null;
+		ArrayList<Integer> newX = new ArrayList<Integer>();
+		ArrayList<Integer> newY = new ArrayList<Integer>();
+		for (int k = 0; k < yPoints.length; k++) {
+			for (int i = 0; i < segmentosX.size(); i++) {
+				TipoClipador lB = new LiangBarsky(segmentosX.get(i),
+						segmentosY.get(i), areaDesenhavel);
+				pontos = lB.cliparPoligono(g, clipping);
+				if (pontos != null) {
+					newX.add(pontos[0][0]);
+					newY.add(pontos[1][0]);
+					g.drawPolygon(pontos[0], pontos[1], pontos[0].length); //
+				}
+			}
+		}
+		
+		System.out.println("qtos ptos? "+newX.size());
+		
+		int[] ptosX = new int [newX.size()*newX.size()];
+		int[] ptosY = new int [newX.size()*newX.size()];
+
+		for (int i = 0; i < ptosX.length; i++) {
+			ptosX[i] = newX.get(i);
+			ptosY[i] = newY.get(i);
+		}
+		g.fillPolygon(ptosX, ptosY, ptosX.length); //
+	}
+
+	private void clipparCurvas(Graphics g, int[] xPoints, int[] yPoints) {
+		// TODO Auto-generated method stub
+		System.out
+				.println("Fazendo Clipping da curva usando o algoritmo de Liang Barsky");
 
 		ArrayList<int[]> segmentosX = new ArrayList<int[]>();
 		ArrayList<int[]> segmentosY = new ArrayList<int[]>();
@@ -119,45 +166,10 @@ public class CanvasViewPort extends Canvas {
 		// int[] newX = new int[segmentosX.size()];
 		// int[] newY = new int[segmentosY.size()];
 
-		for (int k = 0; k < yPoints.length; k++) {
-			for (int i = 0; i < segmentosX.size(); i++) {
-				TipoClipador lB = new LiangBarsky(segmentosX.get(i),
-						segmentosY.get(i), areaDesenhavel);
-				pontos = lB.cliparPoligono(g, clipping);
-				if (pontos != null) {
-					g.drawPolygon(pontos[0], pontos[1], pontos[0].length); //
-					// newX[i] = pontos[0][0];
-					// newY[i] = pontos[1][0];
-					// g.drawPolygon(newX, newY, newX.length);
-				}
-			}
-		}
-	}
-
-	private void clipparCurvas(Graphics g, int[] xPoints, int[] yPoints) {
-		// TODO Auto-generated method stub
-		System.out
-				.println("Fazendo Clipping da curva usando o algoritmo de Liang Barsky");
-
-		ArrayList<int[]> segmentosX = new ArrayList<int[]>();
-		ArrayList<int[]> segmentosY = new ArrayList<int[]>();
-
-		for (int i = 0; i < xPoints.length; i++) {
-			if (i != (xPoints.length - 1)) {
-				int[] segmentoRetaX = { xPoints[i], xPoints[i + 1] };
-				int[] segmentoRetaY = { yPoints[i], yPoints[i + 1] };
-				segmentosX.add(segmentoRetaX);
-				segmentosY.add(segmentoRetaY);
-			}
-		}
-		int[][] pontos = null;
-		// int[] newX = new int[segmentosX.size()];
-		// int[] newY = new int[segmentosY.size()];
-
-		for (int k = 0; k < yPoints.length; k++) {
-			for (int i = 0; i < segmentosX.size(); i++) {
-				TipoClipador lB = new LiangBarsky(segmentosX.get(i),
-						segmentosY.get(i), areaDesenhavel);
+		for (int i = 0; i < yPoints.length; i++) {
+			for (int j = 0; j < segmentosX.size(); j++) {
+				TipoClipador lB = new LiangBarsky(segmentosX.get(j),
+						segmentosY.get(j), areaDesenhavel);
 				pontos = lB.cliparPoligono(g, clipping);
 				if (pontos != null) {
 					g.drawPolygon(pontos[0], pontos[1], pontos[0].length); //
