@@ -14,11 +14,17 @@ public class Mundo implements TipoMundo {
 	private int yMax;
 	private int zMax;
 	private int quantCurv;
+	private int quantPts3D;
+	private int quantRts3D;
+	private int quantPol3D;
 
 	private Mundo() {
 		quantPts = 0;
 		quantRts = 0;
 		quantPol = 0;
+		quantPts3D = 0;
+		quantRts3D = 0;
+		quantPol3D = 0;
 		xMax = 680;
 		yMax = 680;
 		zMax = 680;
@@ -58,7 +64,8 @@ public class Mundo implements TipoMundo {
 			boolean preenchido) {
 		// TODO Auto-generated method stub
 		quantPol++;
-		displayFile.add(Objeto.criarPoligono(("O" + quantPol), listCord, cor, preenchido));
+		displayFile.add(Objeto.criarPoligono(("O" + quantPol), listCord, cor,
+				preenchido));
 	}
 
 	@Override
@@ -72,17 +79,47 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirCurvaBezier(ArrayList<TipoCoordenadas> listCord, Color cor,
-			String numPontos) {
+	public void incluirCurvaBezier(ArrayList<TipoCoordenadas> listCord,
+			Color cor, String numPontos) {
 		// TODO Auto-generated method stub
 		quantCurv++;
-		displayFile.add(Objeto.criarCurvaBezier(("C"+quantCurv), listCord, cor, numPontos));
-		
+		displayFile.add(Objeto.criarCurvaBezier(("C" + quantCurv), listCord,
+				cor, numPontos));
+
 	}
+
 	public void incluirCurvaSpline(ArrayList<SemiPonto> listCord, Color cor) {
 		// TODO Auto-generated method stub
 		quantCurv++;
-		displayFile.add(Objeto.criarCurvaSpline(("C"+quantCurv), listCord, cor));
-		
+		displayFile.add(Objeto.criarCurvaSpline(("C" + quantCurv), listCord,
+				cor));
+	}
+
+	@Override
+	public void incluirObjeto3D(CoordenadasHomogeneas coordenadasHomogeneas,
+			Color cor) {
+		// TODO Auto-generated method stub
+		quantPts3D++;
+		displayFile.add(Objeto3D.criarPonto(("P3D" + quantPts3D),
+				coordenadasHomogeneas, cor));
+	}
+
+	@Override
+	public void incluirObjeto3D(CoordenadasHomogeneas c1,
+			CoordenadasHomogeneas c2, Color cor) {
+		// TODO Auto-generated method stub
+		quantRts3D++;
+		displayFile.add(Objeto3D.criarReta(("R3D" + quantRts3D), c1, c2, cor));
+
+	}
+
+	@Override
+	public void incluirObjeto3D(ArrayList<TipoCoordenadas> listCord, Color cor,
+			boolean preenchido) {
+		// TODO Auto-generated method stub
+		quantPol3D++;
+		displayFile.add(Objeto3D.criarPoligono(("O3D" + quantPol3D), listCord, cor,
+				preenchido));
+
 	}
 }

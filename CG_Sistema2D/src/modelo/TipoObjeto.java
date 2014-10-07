@@ -30,4 +30,6 @@ public interface TipoObjeto {
 	void moverSeWin(Direcoes dir);
 
 	boolean preenchido();
+
+	void moverSe(double dX, double dY, double dZ);
 }

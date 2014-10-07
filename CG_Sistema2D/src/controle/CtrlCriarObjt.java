@@ -16,14 +16,14 @@ import javax.swing.JTextField;
 
 public class CtrlCriarObjt implements ActionListener, KeyListener {
 
-	private JFrame frame;
-	private JLabel lblQuant;
-	private JTextField entryQuant;
-	private JButton btQuant;
-	private JLabel lblCor;
-	private JColorChooser corChooser;
-	private JCheckBox checkPreenchido;
-	private JLabel lblPreench;
+	protected JFrame frame;
+	protected JLabel lblQuant;
+	protected JTextField entryQuant;
+	protected JButton btQuant;
+	protected JLabel lblCor;
+	protected JColorChooser corChooser;
+	protected JCheckBox checkPreenchido;
+	protected JLabel lblPreench;
 
 	public CtrlCriarObjt() {
 		// TODO Auto-generated constructor stub
@@ -36,7 +36,7 @@ public class CtrlCriarObjt implements ActionListener, KeyListener {
 		obterPontos();
 	}
 
-	private void obterPontos() {
+	protected void obterPontos() {
 		frame = new JFrame();
 		frame.setVisible(true);
 		frame.setSize(650, 400);

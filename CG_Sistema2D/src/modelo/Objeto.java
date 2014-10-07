@@ -9,8 +9,8 @@ public abstract class Objeto implements TipoObjeto {
 
 	private static final int DIVISOES = 10;
 	private String nome;
-	private ArrayList<TipoCoordenadas> listaCoord;
-	private ArrayList<TipoCoordenadasNormalizada> listaCoordWin = new ArrayList<TipoCoordenadasNormalizada>();
+	protected ArrayList<TipoCoordenadas> listaCoord;
+	protected ArrayList<TipoCoordenadasNormalizada> listaCoordWin = new ArrayList<TipoCoordenadasNormalizada>();
 
 	private Color cor;
 
@@ -82,6 +82,41 @@ public abstract class Objeto implements TipoObjeto {
 
 	public boolean preenchido() {
 		return false;
+	}
+
+	public void moverSe(double dX, double dY, double dZ) {
+		double[] l1 = { 1.0, 0.0, 0.0, 0.0 };
+		double[] l2 = { 0.0, 1.0, 0.0, 0.0 };
+		double[] l3 = { 0.0, 0.0, 1.0, 0.0 };
+		double[] l4 = { dX, dY, dZ, 1.0 };
+		double[][] m = { l1, l2, l3, l4 };
+		Matrix t = new Matrix(m);
+
+		Matrix coord = new Matrix(1, 4);
+		for (TipoCoordenadas c : listaCoord) {
+			coord.set(0, 0, c.getXD());
+			coord.set(0, 1, c.getYD());
+			coord.set(0, 2, c.getZD());
+			coord.set(0, 3, 1.0);
+
+			Matrix resultado = coord.times(t);
+
+			c.setX(resultado.get(0, 0));
+			c.setY(resultado.get(0, 1));
+			c.setZ(resultado.get(0, 2));
+		}
+		for (TipoCoordenadas cW : listaCoordWin) {
+			coord.set(0, 0, cW.getXD());
+			coord.set(0, 1, cW.getYD());
+			coord.set(0, 2, cW.getZD());
+			coord.set(0, 3, 1.0);
+
+			Matrix resultado = coord.times(t);
+
+			cW.setX(resultado.get(0, 0));
+			cW.setY(resultado.get(0, 1));
+			cW.setZ(resultado.get(0, 2));
+		}
 	}
 
 	@Override
@@ -456,7 +491,6 @@ public abstract class Objeto implements TipoObjeto {
 						* coef.get(1, k) * (Math.pow(delta, 2));
 				delta3F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3));
 
-				
 			}
 
 			TipoCoordenadas p = listCoord.get(i);
@@ -488,9 +522,8 @@ public abstract class Objeto implements TipoObjeto {
 			coord.setZ(1);
 
 			ptsCurva.add(new CoordenadasNorm(f0[0], f0[1], 1));
-			System.out.println("coord x: "+coord.getXD());
-			System.out.println("coord y: "+coord.getYD());
-
+			System.out.println("coord x: " + coord.getXD());
+			System.out.println("coord y: " + coord.getYD());
 
 			f0[0] += deltaF0[0];
 			deltaF0[0] += delta2F0[0];
@@ -501,14 +534,14 @@ public abstract class Objeto implements TipoObjeto {
 			f0[2] += deltaF0[2];
 			deltaF0[2] += delta2F0[2];
 			delta3F0[2] += delta3F0[1];
-			
+
 		}
-		
+
 		for (TipoCoordenadas c : ptsCurva) {
-			System.out.println("pts curva x: "+c.getXD());
-			System.out.println("pts curva y: "+c.getYD());
+			System.out.println("pts curva x: " + c.getXD());
+			System.out.println("pts curva y: " + c.getYD());
 		}
-		
+
 		return ptsCurva;
 	}
 }

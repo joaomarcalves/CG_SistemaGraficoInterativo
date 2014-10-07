@@ -23,16 +23,16 @@ import modelo.SemiPonto;
 
 public class CtrlPontos implements ActionListener, KeyListener {
 
-	private JFrame framePai;
-	private JFrame frame;
-	private int quant;
-	private JTextField entryQuant;
-	private JPanel pnlPrincipal;
-	private JPanel pnlSec;
-	private ArrayList<SemiPonto> listaSemiPontos;
-	private JButton btCriarObjt;
-	private JColorChooser colorChooser;
-	private JCheckBox checkPreenchido;
+	protected JFrame framePai;
+	protected JFrame frame;
+	protected int quant;
+	protected JTextField entryQuant;
+	protected JPanel pnlPrincipal;
+	protected JPanel pnlSec;
+	protected ArrayList<SemiPonto> listaSemiPontos;
+	protected JButton btCriarObjt;
+	protected JColorChooser colorChooser;
+	protected JCheckBox checkPreenchido;
 
 	public CtrlPontos(JFrame frameFilho, JTextField entryQuant2,
 			JColorChooser corChooser, JCheckBox checkPreenchido) {
@@ -49,7 +49,7 @@ public class CtrlPontos implements ActionListener, KeyListener {
 		obterPontos();
 	}
 
-	private void obterPontos() {
+	protected void obterPontos() {
 
 		try {
 			framePai.dispose();

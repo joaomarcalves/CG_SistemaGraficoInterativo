@@ -19,12 +19,11 @@ import visao.InterfaceGrafica;
 
 public class ControladorDeObjetos implements ActionListener, KeyListener {
 
-	private ArrayList<SemiPonto> listaSemiPontos;
-	private JFrame framePai;
-
-	private TipoMundo mundo;
-	private Color cor;
-	private boolean preenchido;
+	protected ArrayList<SemiPonto> listaSemiPontos;
+	protected JFrame framePai;
+	protected TipoMundo mundo;
+	protected Color cor;
+	protected boolean preenchido;
 
 	public ControladorDeObjetos(JFrame frame,
 			ArrayList<SemiPonto> listaSemiPontos, JColorChooser colorChooser,
@@ -43,7 +42,7 @@ public class ControladorDeObjetos implements ActionListener, KeyListener {
 		criarMetaObjeto();
 	}
 
-	private void criarMetaObjeto() {
+	protected void criarMetaObjeto() {
 		framePai.dispose();
 		switch (listaSemiPontos.size()) {
 		case 1:
@@ -57,7 +56,7 @@ public class ControladorDeObjetos implements ActionListener, KeyListener {
 		}
 	}
 
-	private void criarPoligono() {
+	protected void criarPoligono() {
 		// TODO Auto-generated method stub
 		ArrayList<TipoCoordenadas> listCord = new ArrayList<TipoCoordenadas>();
 		for (SemiPonto sp : listaSemiPontos) {
@@ -69,7 +68,7 @@ public class ControladorDeObjetos implements ActionListener, KeyListener {
 
 	}
 
-	private void criarReta() {
+	protected void criarReta() {
 		// TODO Auto-generated method stub
 		SemiPonto sp1 = listaSemiPontos.get(0);
 		SemiPonto sp2 = listaSemiPontos.get(1);
@@ -79,7 +78,7 @@ public class ControladorDeObjetos implements ActionListener, KeyListener {
 		InterfaceGrafica.getInstance().exibirObjetos();
 	}
 
-	private void criarPonto() {
+	protected void criarPonto() {
 		// TODO Auto-generated method stub
 		SemiPonto sp = listaSemiPontos.get(0);
 		mundo.incluirObjeto(new CoordenadasHomogeneas(sp.gettFx().getText(), sp

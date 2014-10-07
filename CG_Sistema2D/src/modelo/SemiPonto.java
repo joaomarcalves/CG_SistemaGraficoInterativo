@@ -1,15 +1,14 @@
 package modelo;
 
-import java.awt.Label;
-import java.awt.TextField;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 public class SemiPonto {
-	private JLabel nome;
-	private JTextField tFx;
-	private JTextField tFy;
+	protected JLabel nome;
+	protected JTextField tFx;
+	protected JTextField tFy;
+	private JTextField tFz;
 
 	public SemiPonto(JLabel label, JTextField tfX, JTextField tfY) {
 		// TODO Auto-generated constructor stub
@@ -40,5 +39,10 @@ public class SemiPonto {
 
 	public void settFy(JTextField tFy) {
 		this.tFy = tFy;
+	}
+
+	public JTextField gettFz() {
+		// TODO Auto-generated method stub
+		return this.tFz;
 	}
 }

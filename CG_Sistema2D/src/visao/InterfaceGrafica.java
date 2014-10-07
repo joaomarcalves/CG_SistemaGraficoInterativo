@@ -36,6 +36,7 @@ import controle.CtrlCimaTrans;
 import controle.CtrlClipping;
 import controle.CtrlCriarCurva;
 import controle.CtrlCriarObjt;
+import controle.CtrlCriarObjt3D;
 import controle.CtrlDir;
 import controle.CtrlDirTrans;
 import controle.CtrlEsq;
@@ -45,6 +46,7 @@ import controle.CtrlMais;
 import controle.CtrlMaisEscal;
 import controle.CtrlMenos;
 import controle.CtrlMenosEscal;
+import controle.CtrlTrans3D;
 import controle.CtrlRot;
 import controle.CtrlRotWin;
 import controle.CtrlTamPasso;
@@ -66,7 +68,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	private JButton btDir;
 	private JButton btMais;
 	private JButton btMenos;
-	private JButton btCriar;
+	private JButton btObjeto;
 	private JPanel pnlEsq;
 	private JPanel pnlNav;
 	private JPanel pnlZoom;
@@ -132,6 +134,11 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	private JMenu menuAlgCurva;
 	private JRadioButtonMenuItem menuBezier;
 	private JRadioButtonMenuItem menuSpline;
+	private JButton btObjeto3D;
+	private JButton btCurva3D;
+	private CtrlCriarObjt3D ctrlCriarObjt3D;
+	private JButton btTrans3D;
+	private CtrlTrans3D ctrlNav3D;
 
 	private InterfaceGrafica() {
 		// Criar controlador de configuração
@@ -188,7 +195,8 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		this.setTitle("Sistema 2D Básico");
 		this.setSize(1330, 710);
 		lblVP = new JLabel("Viewport", SwingConstants.CENTER);
-		canvas = new CanvasViewPort(Mundo.getInstance().objetos());
+		canvas = new CanvasViewPort();
+		canvas.construirViewPort(Mundo.getInstance().objetos());
 		campoDeObjetos = new List();
 		campoDeObjetos.setMultipleMode(true);
 		pnlCentral = new JPanel();
@@ -215,7 +223,9 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		entryGrausWin.setText("90");
 
 		// Criação dos controladores de eventos
+		ctrlNav3D = new CtrlTrans3D();
 		ctrlCriarCurva = new CtrlCriarCurva();
+		ctrlCriarObjt3D = new CtrlCriarObjt3D();
 		ctrlImportar = new CtrlImportar(this);
 		ctrlCriarObjt = new CtrlCriarObjt();
 		ctrlMais = new CtrlMais();
@@ -234,16 +244,24 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		lblRotWin = new JLabel("Rotacionar a Janela (º)", JLabel.CENTER);
 
 		// Criação dos botões e adição dos controladores
-		btCriar = new JButton("Criar objeto");
+		btObjeto3D = new JButton("Criar objeto 3D");
+		btCurva3D = new JButton("Criar curva 3D");
+		btObjeto = new JButton("Criar objeto 2D");
 		btImportar = new JButton("Importar objeto");
 		btEsq = new JButton("←");
 		btCima = new JButton("↑");
 		btBaixo = new JButton("↓");
 		btDir = new JButton("→");
+		btTrans3D = new JButton("Navegação 3D");
 		btMais = new JButton("+");
 		btMenos = new JButton("-");
 		btRotWin = new JButton("Rotacionar");
-		btCriarCurva = new JButton("Criar curva");
+		btCriarCurva = new JButton("Criar curva 2D");
+
+		btTrans3D.addActionListener(ctrlNav3D);
+		btTrans3D.addKeyListener(ctrlNav3D);
+		btObjeto3D.addActionListener(ctrlCriarObjt3D);
+		btObjeto3D.addKeyListener(ctrlCriarObjt3D);
 		btCriarCurva.addActionListener(ctrlCriarCurva);
 		btCriarCurva.addKeyListener(ctrlCriarCurva);
 		btRotWin.addActionListener(ctrlRotWin);
@@ -252,8 +270,8 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		btMais.addKeyListener(ctrlMais);
 		btMenos.addActionListener(ctrlMenos);
 		btMenos.addKeyListener(ctrlMenos);
-		btCriar.addActionListener(ctrlCriarObjt);
-		btCriar.addKeyListener(ctrlCriarObjt);
+		btObjeto.addActionListener(ctrlCriarObjt);
+		btObjeto.addKeyListener(ctrlCriarObjt);
 		btImportar.addActionListener(ctrlImportar);
 		btImportar.addKeyListener(ctrlImportar);
 		btEsq.addActionListener(ctrlEsq);
@@ -273,12 +291,14 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		// window e viewport
 		pnlEsq = new JPanel();
 		pnlCriarImportar = new JPanel();
+		pnlCriarImportar.setLayout(new GridLayout(2, 3));
 		pnlEsq.setLayout(new GridLayout(10, 1));
 		pnlNav = new JPanel();
 		pnlNav.add(btEsq);
 		pnlNav.add(btCima);
 		pnlNav.add(btBaixo);
 		pnlNav.add(btDir);
+
 		pnlZoom = new JPanel();
 		pnlZoom.setLayout(new GridLayout(1, 2));
 		pnlZoom.add(btMais);
@@ -286,7 +306,9 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlEsq.add(lblObjeto);
 		pnlEsq.add(campoDeObjetos);
 
-		pnlCriarImportar.add(btCriar);
+		pnlCriarImportar.add(btObjeto3D);
+		pnlCriarImportar.add(btCurva3D);
+		pnlCriarImportar.add(btObjeto);
 		pnlCriarImportar.add(btCriarCurva);
 		pnlCriarImportar.add(btImportar);
 
@@ -362,7 +384,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		// Criação do painel que contém os botões e campos para a transformação
 		// dos objetos
 		pnlDir = new JPanel();
-		pnlDir.setLayout(new GridLayout(9, 1));
+		pnlDir.setLayout(new GridLayout(10, 1));
 		pnlDir.add(lblTrans);
 		pnlNavTrans = new JPanel();
 		pnlNavTrans.setLayout(new GridLayout(1, 4));
@@ -371,6 +393,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlNavTrans.add(btBaixoTrans);
 		pnlNavTrans.add(btDirTrans);
 		pnlDir.add(pnlNavTrans);
+		pnlDir.add(btTrans3D);
 		pnlDir.add(lblEscal);
 		pnlEscal = new JPanel();
 		pnlEscal.setLayout(new GridLayout(1, 2));
