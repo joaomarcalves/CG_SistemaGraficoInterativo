@@ -85,12 +85,10 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public void moverSe(double dX, double dY, double dZ) {
-		double[] l1 = { 1.0, 0.0, 0.0, 0.0 };
-		double[] l2 = { 0.0, 1.0, 0.0, 0.0 };
-		double[] l3 = { 0.0, 0.0, 1.0, 0.0 };
-		double[] l4 = { dX, dY, dZ, 1.0 };
-		double[][] m = { l1, l2, l3, l4 };
-		Matrix t = new Matrix(m);
+		
+		FabricaMatriz t1 = new FabricaMatriz();
+		Matrix t = t1.matrizTranslação(dX, dY, dZ);
+		
 
 		Matrix coord = new Matrix(1, 4);
 		for (TipoCoordenadas c : listaCoord) {
@@ -194,7 +192,7 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	@Override
-	public void escalonarSe(Escalonamento tipo) {
+	public void escalonarSe(Escalonamento tipo) {		
 		// TODO Auto-generated method stub
 		double sX = 1, sY = 1;
 		double cX = this.centro().getXD();
@@ -473,12 +471,7 @@ public abstract class Objeto implements TipoObjeto {
 			}
 
 			Matrix coef = gbs.times(matrizGeo);
-			/*
-			 * System.out.println("matriz coef ::"); for (int p = 0; p <
-			 * coef.getRowDimension(); p++) { for (int d = 0; d <
-			 * coef.getColumnDimension(); d++) { System.out.println(coef.get(p,
-			 * d)); } } System.out.println("matriz coef ^^");
-			 */
+			
 
 			double delta = (1.0 / DIVISOES);
 
@@ -522,8 +515,6 @@ public abstract class Objeto implements TipoObjeto {
 			coord.setZ(1);
 
 			ptsCurva.add(new CoordenadasNorm(f0[0], f0[1], 1));
-			System.out.println("coord x: " + coord.getXD());
-			System.out.println("coord y: " + coord.getYD());
 
 			f0[0] += deltaF0[0];
 			deltaF0[0] += delta2F0[0];
@@ -536,12 +527,6 @@ public abstract class Objeto implements TipoObjeto {
 			delta3F0[2] += delta3F0[1];
 
 		}
-
-		for (TipoCoordenadas c : ptsCurva) {
-			System.out.println("pts curva x: " + c.getXD());
-			System.out.println("pts curva y: " + c.getYD());
-		}
-
 		return ptsCurva;
 	}
 }

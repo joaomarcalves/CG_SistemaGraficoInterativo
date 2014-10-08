@@ -79,7 +79,7 @@ public class CanvasViewPort extends Canvas {
 				clipparReta(g, xPoints, yPoints);
 			} else if (o.nome().startsWith("O")) {
 				if (clipping) {
-					clipparPoligono(g, xPoints, yPoints);
+					clipparPoligono(g, xPoints, yPoints, o.preenchido());
 				} else {
 					g.drawPolygon(xPoints, yPoints, xPoints.length);
 					if (o.preenchido()) {
@@ -105,11 +105,11 @@ public class CanvasViewPort extends Canvas {
 		int zT = (int) transformadaViewPortZ(zNT);
 
 		g.setColor(o.cor());
-		
-		System.out.println("x "+xT);
-		System.out.println("y "+yT);
-		System.out.println("z "+zT);
-		
+
+		System.out.println("x " + xT);
+		System.out.println("y " + yT);
+		System.out.println("z " + zT);
+
 		g.drawLine(xT, yT, xT, yT);
 		/*
 		 * if (areaDesenhavel.contains(xT, yT)) { g.drawLine(xT, yT, xT, yT); }
@@ -124,7 +124,8 @@ public class CanvasViewPort extends Canvas {
 				.getInstance().xMax() - Janela.getInstance().xMin())) * (zMax - zMin));
 	}
 
-	private void clipparPoligono(Graphics g, int[] xPoints, int[] yPoints) {
+	private void clipparPoligono(Graphics g, int[] xPoints, int[] yPoints,
+			boolean preenchido) {
 		// TODO Auto-generated method stub
 		System.out
 				.println("Fazendo Clipping da polígono usando o algoritmo de Liang Barsky");
@@ -152,13 +153,10 @@ public class CanvasViewPort extends Canvas {
 			pontos = lB.cliparPoligono(g, clipping);
 			if (pontos != null) {
 				for (int j = 0; j < pontos[0].length; j++) {
-					System.out.println("\ni: " + i + "\nj: " + j);
 					newX.add(pontos[0][j]);
 					newY.add(pontos[1][j]);
-					System.out.println("pto x: " + pontos[0][j]);
-					System.out.println("pto y: " + pontos[1][j]);
 				}
-				g.drawPolygon(pontos[0], pontos[1], pontos[0].length); //
+				g.drawPolygon(pontos[0], pontos[1], pontos[0].length);
 			}
 		}
 
@@ -169,7 +167,8 @@ public class CanvasViewPort extends Canvas {
 			ptosX[i] = newX.get(i);
 			ptosY[i] = newY.get(i);
 		}
-		g.fillPolygon(ptosX, ptosY, ptosX.length); //
+		if (preenchido)
+			g.fillPolygon(ptosX, ptosY, ptosX.length);
 	}
 
 	private void clipparCurvas(Graphics g, int[] xPoints, int[] yPoints) {

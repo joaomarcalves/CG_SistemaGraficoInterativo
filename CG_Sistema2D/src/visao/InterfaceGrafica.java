@@ -135,7 +135,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	private JRadioButtonMenuItem menuBezier;
 	private JRadioButtonMenuItem menuSpline;
 	private JButton btObjeto3D;
-	private JButton btCurva3D;
+	private JButton btSpf3D;
 	private CtrlCriarObjt3D ctrlCriarObjt3D;
 	private JButton btTrans3D;
 	private CtrlTrans3D ctrlNav3D;
@@ -245,7 +245,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 
 		// Criação dos botões e adição dos controladores
 		btObjeto3D = new JButton("Criar objeto 3D");
-		btCurva3D = new JButton("Criar curva 3D");
+		btSpf3D = new JButton("Superfície 3D");
 		btObjeto = new JButton("Criar objeto 2D");
 		btImportar = new JButton("Importar objeto");
 		btEsq = new JButton("←");
@@ -307,7 +307,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlEsq.add(campoDeObjetos);
 
 		pnlCriarImportar.add(btObjeto3D);
-		pnlCriarImportar.add(btCurva3D);
+		pnlCriarImportar.add(btSpf3D);
 		pnlCriarImportar.add(btObjeto);
 		pnlCriarImportar.add(btCriarCurva);
 		pnlCriarImportar.add(btImportar);
