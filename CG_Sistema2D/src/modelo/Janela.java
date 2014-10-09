@@ -32,7 +32,7 @@ public class Janela {
 		return instance;
 	}
 
-	public TipoCoordenadas centroWin() {
+	public CoordenadasHomogeneas centroWin() {
 		double mediaX = (xMax + xMin) / 2;
 		double mediaY = (yMax + yMin) / 2;
 		// double mediaZ = (zMax+zMin)/2;
@@ -146,12 +146,12 @@ public class Janela {
 
 	private void criarVetoresReferencia() {
 		// Criando um vetor de deslocamento para cima
-		ArrayList<TipoCoordenadas> lV = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> lV = new ArrayList<CoordenadasHomogeneas>();
 		lV.add(new CoordenadasHomogeneas(0, 0, 1));
 		lV.add(new CoordenadasHomogeneas(0, 10, 1));
 		vetorVertical = new Reta("vetor vertical", lV, null);
 		
-		ArrayList<TipoCoordenadas> lH = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> lH = new ArrayList<CoordenadasHomogeneas>();
 		lH.add(new CoordenadasHomogeneas(0, 0, 1));
 		lH.add(new CoordenadasHomogeneas(10, 0, 1));
 		vetorHorizontal = new Reta("vetor horizontal", lH, null);

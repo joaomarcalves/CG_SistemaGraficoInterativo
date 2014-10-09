@@ -7,7 +7,7 @@ public interface TipoObjeto {
 
 	String nome();
 
-	ArrayList<TipoCoordenadasNormalizada> coordenadas();
+	ArrayList<CoordenadasHomogeneas> coordenadas();
 
 	String coordenadasString();
 
@@ -15,7 +15,7 @@ public interface TipoObjeto {
 
 	void escalonarSe(Escalonamento tipo);
 
-	TipoCoordenadas centro();
+	CoordenadasHomogeneas centro();
 
 	Color cor();
 
@@ -25,11 +25,12 @@ public interface TipoObjeto {
 
 	void rotacionarAoRedorPto(double graus, String ptX, String ptY);
 
-	void rotacionarEmCoordWin(double graus, TipoCoordenadas centroWin);
+	void rotacionarEmCoordWin(double graus, CoordenadasHomogeneas centroWin);
 
 	void moverSeWin(Direcoes dir);
 
 	boolean preenchido();
 
 	void moverSe(double dX, double dY, double dZ);
+
 }

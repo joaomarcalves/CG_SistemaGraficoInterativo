@@ -23,14 +23,14 @@ public class InterpretadorObj {
 	}
 
 	public void criarObjetoObj() throws IOException {
-		ArrayList<TipoCoordenadas> listaCoords = new ArrayList<TipoCoordenadas>();
-		ArrayList<TipoCoordenadas> subListaCoords = null;
+		ArrayList<CoordenadasHomogeneas> listaCoords = new ArrayList<CoordenadasHomogeneas>();
+		ArrayList<CoordenadasHomogeneas> subListaCoords = null;
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String linha;
 		while ((linha = br.readLine()) != null) {
 			String[] campos = linha.split(" ");
 			String tipo = campos[0];
-			TipoCoordenadas coord;
+			CoordenadasHomogeneas coord;
 
 			if (tipo.equals("v")) {
 				coord = new CoordenadasHomogeneas(
@@ -41,7 +41,7 @@ public class InterpretadorObj {
 			}
 
 			if (tipo.equals("f")) {
-				subListaCoords = new ArrayList<TipoCoordenadas>();
+				subListaCoords = new ArrayList<CoordenadasHomogeneas>();
 				for (int i = 1; i < campos.length; i++) {
 					subListaCoords.add(listaCoords.get(Integer.parseInt((campos[i].split("/")[0])) - 1));
 				}

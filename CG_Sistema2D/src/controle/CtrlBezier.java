@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 
 import modelo.CoordenadasHomogeneas;
 import modelo.Mundo;
-import modelo.TipoCoordenadas;
 import visao.InterfaceGrafica;
 
 public class CtrlBezier implements KeyListener, ActionListener {
@@ -52,7 +51,7 @@ public class CtrlBezier implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		framePai.dispose();
-		ArrayList<TipoCoordenadas> listCord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listCord = new ArrayList<CoordenadasHomogeneas>();
 		listCord.add(new CoordenadasHomogeneas(pX1.getText(), pY1.getText(),
 				"1"));
 		listCord.add(new CoordenadasHomogeneas(pX2.getText(), pY2.getText(),

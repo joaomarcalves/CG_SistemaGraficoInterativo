@@ -64,4 +64,25 @@ public class FabricaMatriz {
 		Matrix rz = new Matrix(m);
 		return rz;
 	}
+
+	public Matrix matrizGBS() {
+		// TODO Auto-generated method stub
+		double[][] g = { { -1.0 / 6.0, 3.0 / 6.0, -3.0 / 6.0, 1.0 / 6.0 },
+				{ 3.0 / 6.0, -1.0, 3.0 / 6.0, 0.0 },
+				{ -3.0 / 6.0, 0.0, 3.0 / 6.0, 0.0 },
+				{ 1.0 / 6.0, 4.0 / 6.0, 1.0 / 6.0, 0.0 } };
+		Matrix gbs = new Matrix(g);
+		return gbs;
+	}
+
+	public Matrix matrizMper(double d) {
+		// TODO Auto-generated method stub
+		double[] l1 = { 1.0, 0.0, 0.0, 0.0 };
+		double[] l2 = { 0.0, 1.0, 0.0, 0.0 };
+		double[] l3 = { 0.0, 0.0, 1.0, (1.0/d) };
+		double[] l4 = { 0.0, 0.0, 0.0, 0.0 };
+		double[][] m = { l1, l2, l3, l4 };
+		Matrix mper = new Matrix(m);
+		return mper;
+	}
 }

@@ -7,16 +7,16 @@ import Jama.Matrix;
 
 public class Objeto3D extends Objeto {
 
-	public Objeto3D(String nome, ArrayList<TipoCoordenadas> listaCoord,
+	public Objeto3D(String nome, ArrayList<CoordenadasHomogeneas> listaCoord,
 			Color cor) {
 		super(nome, listaCoord, cor);
 		// TODO Auto-generated constructor stub
 	}
 
 	public static TipoObjeto criarPonto(String nome,
-			TipoCoordenadas coordenadas, Color cor) {
+			CoordenadasHomogeneas coordenadas, Color cor) {
 		// TODO Auto-generated method stub
-		ArrayList<TipoCoordenadas> listaCoord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
 		TipoObjeto p = new Ponto3D(nome, listaCoord, cor);
 		p.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -25,9 +25,9 @@ public class Objeto3D extends Objeto {
 	}
 
 	public static TipoObjeto criarReta(String nome,
-			TipoCoordenadas coordenadas, TipoCoordenadas coordenadas2, Color cor) {
+			CoordenadasHomogeneas coordenadas, CoordenadasHomogeneas coordenadas2, Color cor) {
 		// TODO Auto-generated method stub
-		ArrayList<TipoCoordenadas> listaCoord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
 		listaCoord.add(coordenadas2);
 
@@ -38,7 +38,7 @@ public class Objeto3D extends Objeto {
 	}
 
 	public static TipoObjeto criarPoligono(String nome,
-			ArrayList<TipoCoordenadas> listCord, Color cor, boolean preenchido) {
+			ArrayList<CoordenadasHomogeneas> listCord, Color cor, boolean preenchido) {
 		// TODO Auto-generated method stub
 		TipoObjeto o = new Poligono3D(nome, listCord, cor, preenchido);
 		o.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -88,7 +88,7 @@ public class Objeto3D extends Objeto {
 		// Aplicando retorno para posição
 
 		Matrix coord = new Matrix(1, 4);
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			coord.set(0, 0, c.getXD());
 			coord.set(0, 1, c.getYD());
 			coord.set(0, 2, c.getZD());
@@ -102,7 +102,7 @@ public class Objeto3D extends Objeto {
 			c.setY(resultado.get(0, 1));
 			c.setZ(resultado.get(0, 2));
 		}
-		for (TipoCoordenadas cW : listaCoordWin) {
+		for (CoordenadasHomogeneas cW : listaCoordWin) {
 			coord.set(0, 0, cW.getXD());
 			coord.set(0, 1, cW.getYD());
 			coord.set(0, 2, cW.getZD());
@@ -119,7 +119,7 @@ public class Objeto3D extends Objeto {
 	}
 
 	public void rotacionarSe(double g) {
-		TipoCoordenadas co = this.centro();
+		CoordenadasHomogeneas co = this.centro();
 
 		FabricaMatriz m = new FabricaMatriz();
 		Matrix t1 = m.matrizTranslação(-co.getXD(), -co.getYD(), -co.getZD());
@@ -132,7 +132,7 @@ public class Objeto3D extends Objeto {
 
 
 		Matrix coord = new Matrix(1, 4);
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			coord.set(0, 0, c.getXD());
 			coord.set(0, 1, c.getYD());
 			coord.set(0, 2, c.getZD());
@@ -150,7 +150,7 @@ public class Objeto3D extends Objeto {
 			c.setY(resultado.get(0, 1));
 			c.setZ(resultado.get(0, 2));
 		}
-		for (TipoCoordenadas cW : listaCoordWin) {
+		for (CoordenadasHomogeneas cW : listaCoordWin) {
 			coord.set(0, 0, cW.getXD());
 			coord.set(0, 1, cW.getYD());
 			coord.set(0, 2, cW.getZD());

@@ -7,7 +7,7 @@ public class Poligono extends Objeto implements TipoObjeto {
 
 	private boolean preenchido;
 
-	public Poligono(String nome, ArrayList<TipoCoordenadas> listaCoord, Color cor, boolean preenchido) {
+	public Poligono(String nome, ArrayList<CoordenadasHomogeneas> listaCoord, Color cor, boolean preenchido) {
 		super(nome, listaCoord, cor);
 		// TODO Auto-generated constructor stub
 		this.setPreenchido(preenchido);

@@ -37,7 +37,7 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto(TipoCoordenadas coordenadas, Color cor) {
+	public void incluirObjeto(CoordenadasHomogeneas coordenadas, Color cor) {
 		// TODO Auto-generated method stub
 		quantPts++;
 		displayFile.add(Objeto.criarPonto(("P" + quantPts), coordenadas, cor));
@@ -50,8 +50,8 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto(TipoCoordenadas coordenadas,
-			TipoCoordenadas coordenadas2, Color cor) {
+	public void incluirObjeto(CoordenadasHomogeneas coordenadas,
+			CoordenadasHomogeneas coordenadas2, Color cor) {
 		// TODO Auto-generated method stub
 		quantRts++;
 		displayFile.add(Objeto.criarReta(("R" + quantRts), coordenadas,
@@ -60,7 +60,7 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto(ArrayList<TipoCoordenadas> listCord, Color cor,
+	public void incluirObjeto(ArrayList<CoordenadasHomogeneas> listCord, Color cor,
 			boolean preenchido) {
 		// TODO Auto-generated method stub
 		quantPol++;
@@ -79,7 +79,7 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirCurvaBezier(ArrayList<TipoCoordenadas> listCord,
+	public void incluirCurvaBezier(ArrayList<CoordenadasHomogeneas> listCord,
 			Color cor, String numPontos) {
 		// TODO Auto-generated method stub
 		quantCurv++;
@@ -114,7 +114,7 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto3D(ArrayList<TipoCoordenadas> listCord, Color cor,
+	public void incluirObjeto3D(ArrayList<CoordenadasHomogeneas> listCord, Color cor,
 			boolean preenchido) {
 		// TODO Auto-generated method stub
 		quantPol3D++;

@@ -7,11 +7,13 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.ArrayList;
 
+import modelo.CoordenadasHomogeneas;
+import modelo.FabricaMatriz;
 import modelo.Janela;
+import modelo.Ponto3D;
 import modelo.TipoClipador;
-import modelo.TipoCoordenadas;
-import modelo.TipoCoordenadasNormalizada;
 import modelo.TipoObjeto;
+import Jama.Matrix;
 
 public class CanvasViewPort extends Canvas {
 
@@ -59,15 +61,15 @@ public class CanvasViewPort extends Canvas {
 
 	private void desenharObjetos(Graphics g) {
 		for (TipoObjeto o : objetos) {
-			ArrayList<TipoCoordenadasNormalizada> lC = o.coordenadas();
+			ArrayList<CoordenadasHomogeneas> lC = o.coordenadas();
 			g.setColor(o.cor());
 			int[] xPoints = new int[lC.size()];
 			int[] yPoints = new int[lC.size()];
 			int[] zPoints = new int[lC.size()];
-			for (TipoCoordenadas c : lC) {
+			for (CoordenadasHomogeneas c : lC) {
 				xPoints[lC.indexOf(c)] = (int) transformadaViewPortX(c.getXD());
 				yPoints[lC.indexOf(c)] = (int) transformadaViewPortY(c.getYD());
-				zPoints[lC.indexOf(c)] = (int) transformadaViewPortZ(c.getYD());
+				zPoints[lC.indexOf(c)] = (int) transformadaViewPortZ(c.getZD());
 			}
 
 			if (o.nome().startsWith("P")) {
@@ -76,7 +78,10 @@ public class CanvasViewPort extends Canvas {
 				} else
 					clipparPonto3D(g, o, lC);
 			} else if (o.nome().startsWith("R")) {
-				clipparReta(g, xPoints, yPoints);
+				if (o.getClass().getSimpleName().equals("Reta"))
+					clipparReta(g, xPoints, yPoints);
+				else
+					projeçãoReta(g, xPoints, yPoints, zPoints);
 			} else if (o.nome().startsWith("O")) {
 				if (clipping) {
 					clipparPoligono(g, xPoints, yPoints, o.preenchido());
@@ -94,8 +99,49 @@ public class CanvasViewPort extends Canvas {
 		}
 	}
 
+	private void projeçãoReta(Graphics g, int[] xPoints, int[] yPoints,
+			int[] zPoints) {
+
+		// TODO Auto-generated method stub
+		ArrayList<CoordenadasHomogeneas> lcop = new ArrayList<CoordenadasHomogeneas>();
+		lcop.add(new CoordenadasHomogeneas(0, 0, -120));
+		Ponto3D cop = new Ponto3D("COP", lcop, null);
+		double d = Math.abs(cop.getZ());
+		Matrix mper = new FabricaMatriz().matrizMper(d);
+
+		Matrix p1 = new Matrix(4, 1);
+		p1.set(0, 0, xPoints[0]);
+		p1.set(1, 0, yPoints[0]);
+		p1.set(2, 0, zPoints[0]);
+		p1.set(3, 0, 1);
+		Matrix p2 = new Matrix(4, 1);
+		p2.set(0, 0, xPoints[1]);
+		p2.set(1, 0, yPoints[1]);
+		p2.set(2, 0, zPoints[1]);
+		p2.set(3, 0, 1);
+
+		Matrix pW1 = mper.times(p1);
+
+		xPoints[0] = (int) (pW1.get(0, 0) / (pW1.get(2, 0) / d));
+		yPoints[0] = (int) (pW1.get(1, 0) / (pW1.get(2, 0) / d));
+		zPoints[0] = (int) (d);
+
+		xPoints[0] = (int) (pW1.get(0, 0));
+		yPoints[0] = (int) (pW1.get(1, 0));
+		zPoints[0] = (int) (pW1.get(2, 0));
+
+		Matrix pW2 = mper.times(p2);
+		System.out.println(pW2.get(2, 0));
+		System.out.println((pW2.get(0, 0) / (pW2.get(2, 0) / d)));
+		xPoints[1] = (int) (pW2.get(0, 0) / (pW2.get(2, 0) / d));
+		yPoints[1] = (int) (pW2.get(1, 0) / (pW2.get(2, 0) / d));
+		zPoints[1] = (int) (d);
+
+		clipparReta(g, xPoints, yPoints);
+	}
+
 	private void clipparPonto3D(Graphics g, TipoObjeto o,
-			ArrayList<TipoCoordenadasNormalizada> lC) {
+			ArrayList<CoordenadasHomogeneas> lC) {
 		// TODO Auto-generated method stub
 		double xNT = lC.get(0).getXD();
 		double yNT = lC.get(0).getYD();
@@ -106,22 +152,12 @@ public class CanvasViewPort extends Canvas {
 
 		g.setColor(o.cor());
 
-		System.out.println("x " + xT);
-		System.out.println("y " + yT);
-		System.out.println("z " + zT);
-
 		g.drawLine(xT, yT, xT, yT);
 		/*
 		 * if (areaDesenhavel.contains(xT, yT)) { g.drawLine(xT, yT, xT, yT); }
 		 * else if (!clipping) { g.drawLine(xT, yT, xT, yT);
 		 * System.out.println("Ponto fora da área desenhável"); }
 		 */
-	}
-
-	private int transformadaViewPortZ(double z) {
-		// TODO Auto-generated method stub
-		return (int) (((z - Janela.getInstance().xMin()) / (Janela
-				.getInstance().xMax() - Janela.getInstance().xMin())) * (zMax - zMin));
 	}
 
 	private void clipparPoligono(Graphics g, int[] xPoints, int[] yPoints,
@@ -232,7 +268,7 @@ public class CanvasViewPort extends Canvas {
 	}
 
 	private void clipparPonto(Graphics g, TipoObjeto o,
-			ArrayList<TipoCoordenadasNormalizada> lC) {
+			ArrayList<CoordenadasHomogeneas> lC) {
 
 		double xNT = lC.get(0).getXD();
 		double yNT = lC.get(0).getYD();
@@ -257,6 +293,14 @@ public class CanvasViewPort extends Canvas {
 	private double transformadaViewPortY(double y) {
 		return (((1 - (y - Janela.getInstance().yMin())
 				/ (Janela.getInstance().yMax() - Janela.getInstance().yMin()))) * (yMax - yMin));
+	}
+
+	private int transformadaViewPortZ(double z) {
+		// TODO Auto-generated method stub
+		return (int) z;
+		// (((z - Janela.getInstance().zMin()) / (Janela
+		// .getInstance().zMax() - Janela.getInstance().zMin())) * (zMax -
+		// zMin));
 	}
 
 	public void setClipping(boolean clipping) {

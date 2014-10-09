@@ -13,7 +13,6 @@ import javax.swing.JFrame;
 import modelo.CoordenadasHomogeneas;
 import modelo.Mundo;
 import modelo.SemiPonto;
-import modelo.TipoCoordenadas;
 import modelo.TipoMundo;
 import visao.InterfaceGrafica;
 
@@ -58,7 +57,7 @@ public class ControladorDeObjetos implements ActionListener, KeyListener {
 
 	protected void criarPoligono() {
 		// TODO Auto-generated method stub
-		ArrayList<TipoCoordenadas> listCord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listCord = new ArrayList<CoordenadasHomogeneas>();
 		for (SemiPonto sp : listaSemiPontos) {
 			listCord.add(new CoordenadasHomogeneas(sp.gettFx().getText(), sp
 					.gettFy().getText(), "1"));

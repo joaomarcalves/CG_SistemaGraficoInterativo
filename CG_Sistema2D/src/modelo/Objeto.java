@@ -2,28 +2,28 @@ package modelo;
 
 import java.awt.Color;
 import java.util.ArrayList;
-
 import Jama.Matrix;
 
 public abstract class Objeto implements TipoObjeto {
 
 	private static final int DIVISOES = 10;
 	private String nome;
-	protected ArrayList<TipoCoordenadas> listaCoord;
-	protected ArrayList<TipoCoordenadasNormalizada> listaCoordWin = new ArrayList<TipoCoordenadasNormalizada>();
+	protected ArrayList<CoordenadasHomogeneas> listaCoord;
+	protected ArrayList<CoordenadasHomogeneas> listaCoordWin = new ArrayList<CoordenadasHomogeneas>();
 
 	private Color cor;
 
-	public Objeto(String nome, ArrayList<TipoCoordenadas> listaCoord, Color cor) {
-		construirCoordNorm(listaCoord);
+	public Objeto(String nome, ArrayList<CoordenadasHomogeneas> listaCoord2,
+			Color cor) {
+		construirCoordNorm(listaCoord2);
 		this.nome = nome;
-		this.listaCoord = listaCoord;
+		this.listaCoord = listaCoord2;
 		this.cor = cor;
 	}
 
-	private void construirCoordNorm(ArrayList<TipoCoordenadas> coordMundo) {
+	private void construirCoordNorm(ArrayList<CoordenadasHomogeneas> coordMundo) {
 		// TODO Auto-generated method stub
-		for (TipoCoordenadas cM : coordMundo) {
+		for (CoordenadasHomogeneas cM : coordMundo) {
 			listaCoordWin.add(new CoordenadasNorm(cM.getXD(), cM.getYD(), cM
 					.getZD()));
 		}
@@ -31,9 +31,9 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarPonto(String nome,
-			TipoCoordenadas coordenadas, Color cor) {
+			CoordenadasHomogeneas coordenadas, Color cor) {
 		// TODO Auto-generated method stub
-		ArrayList<TipoCoordenadas> listaCoord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
 		TipoObjeto p = new Ponto(nome, listaCoord, cor);
 		p.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -46,9 +46,9 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarReta(String nome,
-			TipoCoordenadas coordenadas, TipoCoordenadas coordenadas2, Color cor) {
+			CoordenadasHomogeneas coordenadas, CoordenadasHomogeneas coordenadas2, Color cor) {
 		// TODO Auto-generated method stub
-		ArrayList<TipoCoordenadas> listaCoord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
 		listaCoord.add(coordenadas2);
 
@@ -59,7 +59,7 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarPoligono(String nome,
-			ArrayList<TipoCoordenadas> listCord, Color cor, boolean preenchido) {
+			ArrayList<CoordenadasHomogeneas> listCord, Color cor, boolean preenchido) {
 		// TODO Auto-generated method stub
 		TipoObjeto o = new Poligono(nome, listCord, cor, preenchido);
 		o.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -67,13 +67,13 @@ public abstract class Objeto implements TipoObjeto {
 		return o;
 	}
 
-	public ArrayList<TipoCoordenadasNormalizada> coordenadas() {
+	public ArrayList<CoordenadasHomogeneas> coordenadas() {
 		return listaCoordWin;
 	}
 
 	public String coordenadasString() {
 		String cS = "";
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			cS = cS + "(" + c.getXD() + ", " + c.getYD() + ", " + c.getZD()
 					+ ") ";
 		}
@@ -85,13 +85,12 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public void moverSe(double dX, double dY, double dZ) {
-		
+
 		FabricaMatriz t1 = new FabricaMatriz();
 		Matrix t = t1.matrizTranslação(dX, dY, dZ);
-		
 
 		Matrix coord = new Matrix(1, 4);
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			coord.set(0, 0, c.getXD());
 			coord.set(0, 1, c.getYD());
 			coord.set(0, 2, c.getZD());
@@ -103,7 +102,7 @@ public abstract class Objeto implements TipoObjeto {
 			c.setY(resultado.get(0, 1));
 			c.setZ(resultado.get(0, 2));
 		}
-		for (TipoCoordenadas cW : listaCoordWin) {
+		for (CoordenadasHomogeneas cW : listaCoordWin) {
 			coord.set(0, 0, cW.getXD());
 			coord.set(0, 1, cW.getYD());
 			coord.set(0, 2, cW.getZD());
@@ -142,11 +141,11 @@ public abstract class Objeto implements TipoObjeto {
 		 * |1 0 0| |0 1 0| * |x y 1| = |(x+Dx) (y+Dy) 1| |Dx Dy 1|
 		 */
 
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			c.setX(c.getXD() + dX);
 			c.setY(c.getYD() + dY);
 		}
-		for (TipoCoordenadas cW : listaCoordWin) {
+		for (CoordenadasHomogeneas cW : listaCoordWin) {
 			cW.setX(cW.getXD() + dX);
 			cW.setY(cW.getYD() + dY);
 		}
@@ -185,14 +184,14 @@ public abstract class Objeto implements TipoObjeto {
 		 * |1 0 0| |0 1 0| * |x y 1| = |(x+Dx) (y+Dy) 1| |Dx Dy 1|
 		 */
 
-		for (TipoCoordenadas cW : listaCoordWin) {
+		for (CoordenadasHomogeneas cW : listaCoordWin) {
 			cW.setX(cW.getXD() + dX);
 			cW.setY(cW.getYD() + dY);
 		}
 	}
 
 	@Override
-	public void escalonarSe(Escalonamento tipo) {		
+	public void escalonarSe(Escalonamento tipo) {
 		// TODO Auto-generated method stub
 		double sX = 1, sY = 1;
 		double cX = this.centro().getXD();
@@ -221,7 +220,7 @@ public abstract class Objeto implements TipoObjeto {
 		 * ((-Cy*Sy)+Cy)+(Sy*y) 1| |-CxSx+Cx -CySy+Cy 1|
 		 */
 
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			double x = c.getXD();
 			double y = c.getYD();
 
@@ -232,7 +231,7 @@ public abstract class Objeto implements TipoObjeto {
 		double cXwin = this.centroWin().getXD();
 		double cYwin = this.centroWin().getYD();
 
-		for (TipoCoordenadasNormalizada cN : listaCoordWin) {
+		for (CoordenadasHomogeneas cN : listaCoordWin) {
 			double x = cN.getXD();
 			double y = cN.getYD();
 
@@ -241,11 +240,11 @@ public abstract class Objeto implements TipoObjeto {
 		}
 	}
 
-	public TipoCoordenadas centro() {
+	public CoordenadasHomogeneas centro() {
 		double ccX = 0;
 		double ccY = 0;
 		double ccZ = 1;
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			ccX += c.getXD();
 			ccY += c.getYD();
 			// ccZ += c.getZ();
@@ -255,11 +254,11 @@ public abstract class Objeto implements TipoObjeto {
 		return new CoordenadasHomogeneas(ccX, ccY, ccZ);
 	}
 
-	public TipoCoordenadasNormalizada centroWin() {
+	public CoordenadasHomogeneas centroWin() {
 		double ccX = 0;
 		double ccY = 0;
 		double ccZ = 1;
-		for (TipoCoordenadasNormalizada c : listaCoordWin) {
+		for (CoordenadasHomogeneas c : listaCoordWin) {
 			ccX += c.getXD();
 			ccY += c.getYD();
 			// ccZ += c.getZ();
@@ -277,15 +276,15 @@ public abstract class Objeto implements TipoObjeto {
 		double coordenadaX;
 		double coordenadaY;
 
-		TipoCoordenadas co = this.centro();
-		TipoCoordenadasNormalizada coN = this.centroWin();
+		CoordenadasHomogeneas co = this.centro();
+		CoordenadasHomogeneas coN = this.centroWin();
 
 		double cX = co.getXD();
 		double cY = co.getYD();
 		double cosTeta = Math.cos(Math.toRadians(g));
 		double senTeta = Math.sin(Math.toRadians(g));
 
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			double x = c.getXD();
 			double y = c.getYD();
 
@@ -301,7 +300,7 @@ public abstract class Objeto implements TipoObjeto {
 		double cXwin = coN.getXD();
 		double cYwin = coN.getYD();
 
-		for (TipoCoordenadasNormalizada c : listaCoordWin) {
+		for (CoordenadasHomogeneas c : listaCoordWin) {
 			double x = c.getXD();
 			double y = c.getYD();
 
@@ -320,14 +319,14 @@ public abstract class Objeto implements TipoObjeto {
 		double coordenadaX;
 		double coordenadaY;
 
-		TipoCoordenadas co = new CoordenadasHomogeneas(0, 0, 1);
+		CoordenadasHomogeneas co = new CoordenadasHomogeneas(0, 0, 1);
 
 		double cX = co.getXD();
 		double cY = co.getYD();
 		double cosTeta = Math.cos(Math.toRadians(g));
 		double senTeta = Math.sin(Math.toRadians(g));
 
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			double x = c.getXD();
 			double y = c.getYD();
 
@@ -347,7 +346,7 @@ public abstract class Objeto implements TipoObjeto {
 		double coordenadaX;
 		double coordenadaY;
 
-		TipoCoordenadas co = new CoordenadasHomogeneas(Double.parseDouble(eX),
+		CoordenadasHomogeneas co = new CoordenadasHomogeneas(Double.parseDouble(eX),
 				Double.parseDouble(eY), 1);
 
 		double cX = co.getXD();
@@ -355,7 +354,7 @@ public abstract class Objeto implements TipoObjeto {
 		double cosTeta = Math.cos(Math.toRadians(g));
 		double senTeta = Math.sin(Math.toRadians(g));
 
-		for (TipoCoordenadas c : listaCoord) {
+		for (CoordenadasHomogeneas c : listaCoord) {
 			double x = c.getXD();
 			double y = c.getYD();
 
@@ -368,13 +367,13 @@ public abstract class Objeto implements TipoObjeto {
 			c.setY(coordenadaY);
 		}
 
-		TipoCoordenadasNormalizada coN = new CoordenadasNorm(
+		CoordenadasHomogeneas coN = new CoordenadasNorm(
 				Double.parseDouble(eX), Double.parseDouble(eY), 1);
 
 		double cXwin = coN.getXD();
 		double cYwin = coN.getYD();
 
-		for (TipoCoordenadasNormalizada cWin : listaCoordWin) {
+		for (CoordenadasHomogeneas cWin : listaCoordWin) {
 			double x = cWin.getXD();
 			double y = cWin.getYD();
 
@@ -389,7 +388,7 @@ public abstract class Objeto implements TipoObjeto {
 
 	}
 
-	public void rotacionarEmCoordWin(double g, TipoCoordenadas c) {
+	public void rotacionarEmCoordWin(double g, CoordenadasHomogeneas c) {
 
 		double coordenadaX;
 		double coordenadaY;
@@ -397,7 +396,7 @@ public abstract class Objeto implements TipoObjeto {
 		double cosTeta = Math.cos(Math.toRadians(g));
 		double senTeta = Math.sin(Math.toRadians(g));
 
-		for (TipoCoordenadas cW : listaCoordWin) {
+		for (CoordenadasHomogeneas cW : listaCoordWin) {
 			double x = cW.getXD();
 			double y = cW.getYD();
 
@@ -413,9 +412,10 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarCurvaBezier(String nome,
-			ArrayList<TipoCoordenadas> listCord, Color cor2, String numPontos) {
+			ArrayList<CoordenadasHomogeneas> listCord, Color cor2,
+			String numPontos) {
 		// TODO Auto-generated method stub
-		ArrayList<TipoCoordenadas> novaListCoord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> novaListCoord = new ArrayList<CoordenadasHomogeneas>();
 		double limite = (1.0 / Double.parseDouble(numPontos));
 		novaListCoord.add(new CoordenadasNorm(listCord.get(0).getXD(), listCord
 				.get(0).getYD(), 1));
@@ -429,7 +429,7 @@ public abstract class Objeto implements TipoObjeto {
 					* Math.pow((1 - i), 2) * listCord.get(1).getYD() + 3
 					* Math.pow(i, 2) * (1 - i) * listCord.get(2).getYD()
 					+ Math.pow(i, 3) * listCord.get(3).getYD();
-			novaListCoord.add(new CoordenadasNorm(pX, pY, 1));
+			novaListCoord.add(new CoordenadasHomogeneas(pX, pY, 1));
 		}
 		TipoObjeto c = new Curva(nome, novaListCoord, cor2);
 		c.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -441,7 +441,7 @@ public abstract class Objeto implements TipoObjeto {
 			ArrayList<SemiPonto> listaCamposDeCoordenadas, Color cor) {
 		// TODO Auto-generated method stub
 
-		ArrayList<TipoCoordenadas> listCoord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listCoord = new ArrayList<CoordenadasHomogeneas>();
 
 		for (SemiPonto semiPonto : listaCamposDeCoordenadas) {
 			listCoord.add(new CoordenadasNorm(Double.parseDouble(semiPonto
@@ -455,13 +455,11 @@ public abstract class Objeto implements TipoObjeto {
 		double[] delta2F0 = new double[3];
 		double[] delta3F0 = new double[3];
 
-		double[][] g = { { -1.0 / 6.0, 3.0 / 6.0, -3.0 / 6.0, 1.0 / 6.0 },
-				{ 3.0 / 6.0, -1.0, 3.0 / 6.0, 0.0 },
-				{ -3.0 / 6.0, 0.0, 3.0 / 6.0, 0.0 },
-				{ 1.0 / 6.0, 4.0 / 6.0, 1.0 / 6.0, 0.0 } };
-		Matrix gbs = new Matrix(g);
+		FabricaMatriz ma = new FabricaMatriz();
 
-		ArrayList<TipoCoordenadas> ptsCurva = new ArrayList<TipoCoordenadas>();
+		Matrix gbs = ma.matrizGBS();
+
+		ArrayList<CoordenadasHomogeneas> ptsCurva = new ArrayList<CoordenadasHomogeneas>();
 
 		for (int i = 0; i < listCoord.size() - 3; i++) {
 			for (int j = 0; j < matrizGeo.getRowDimension(); j++) {
@@ -471,7 +469,6 @@ public abstract class Objeto implements TipoObjeto {
 			}
 
 			Matrix coef = gbs.times(matrizGeo);
-			
 
 			double delta = (1.0 / DIVISOES);
 
@@ -486,11 +483,11 @@ public abstract class Objeto implements TipoObjeto {
 
 			}
 
-			TipoCoordenadas p = listCoord.get(i);
-			ArrayList<TipoCoordenadas> ptsSegCurva = forwardDifrencies(p, f0,
-					deltaF0, delta2F0, delta3F0);
+			CoordenadasHomogeneas p = listCoord.get(i);
+			ArrayList<CoordenadasHomogeneas> ptsSegCurva = forwardDifrencies(p,
+					f0, deltaF0, delta2F0, delta3F0);
 
-			for (TipoCoordenadas c : ptsSegCurva) {
+			for (CoordenadasHomogeneas c : ptsSegCurva) {
 				ptsCurva.add(c);
 			}
 		}
@@ -502,19 +499,19 @@ public abstract class Objeto implements TipoObjeto {
 		return c;
 	}
 
-	private static ArrayList<TipoCoordenadas> forwardDifrencies(
-			TipoCoordenadas coord, double[] f0, double[] deltaF0,
+	private static ArrayList<CoordenadasHomogeneas> forwardDifrencies(
+			CoordenadasHomogeneas p, double[] f0, double[] deltaF0,
 			double[] delta2F0, double[] delta3F0) {
 		// TODO Auto-generated method stub
 
-		ArrayList<TipoCoordenadas> ptsCurva = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> ptsCurva = new ArrayList<CoordenadasHomogeneas>();
 
 		for (int i = 0; i < DIVISOES; i++) {
-			coord.setX(f0[0]);
-			coord.setY(f0[1]);
-			coord.setZ(1);
+			p.setX(f0[0]);
+			p.setY(f0[1]);
+			p.setZ(1);
 
-			ptsCurva.add(new CoordenadasNorm(f0[0], f0[1], 1));
+			ptsCurva.add(new CoordenadasHomogeneas(f0[0], f0[1], 1));
 
 			f0[0] += deltaF0[0];
 			deltaF0[0] += delta2F0[0];

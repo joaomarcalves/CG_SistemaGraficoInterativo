@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 
 import modelo.CoordenadasHomogeneas;
 import modelo.SemiPonto;
-import modelo.TipoCoordenadas;
 import visao.InterfaceGrafica;
 
 public class ControladorDeObjetos3D extends ControladorDeObjetos {
@@ -22,7 +21,7 @@ public class ControladorDeObjetos3D extends ControladorDeObjetos {
 	protected void criarPoligono() {
 		// TODO Auto-generated method stub
 
-		ArrayList<TipoCoordenadas> listCord = new ArrayList<TipoCoordenadas>();
+		ArrayList<CoordenadasHomogeneas> listCord = new ArrayList<CoordenadasHomogeneas>();
 		for (SemiPonto sp : listaSemiPontos) {
 			listCord.add(new CoordenadasHomogeneas(sp.gettFx().getText(), sp
 					.gettFy().getText(), "1"));
