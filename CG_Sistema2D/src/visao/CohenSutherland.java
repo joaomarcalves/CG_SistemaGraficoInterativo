@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import modelo.AreaCohenSutherland;
 import modelo.TipoArea;
 import modelo.TipoClipador;
+import modelo.Transformadora;
 
 public class CohenSutherland implements TipoClipador {
 	private ArrayList<TipoArea> lA;
@@ -20,10 +21,10 @@ public class CohenSutherland implements TipoClipador {
 	private TipoArea dirbaixo;
 	private TipoArea dircima;
 	private ArrayList<TipoArea> areaComPonto;
-	private int[] xPoints;
-	private int[] yPoints;
+	private double[] xPoints;
+	private double[] yPoints;
 
-	public CohenSutherland(int[] xPoints, int[] yPoints, Polygon areaDesenhavel) {
+	public CohenSutherland(double[] xPoints, double[] yPoints, Polygon areaDesenhavel) {
 
 		this.xPoints = xPoints;
 		this.yPoints = yPoints;
@@ -97,7 +98,18 @@ public class CohenSutherland implements TipoClipador {
 				// A reta está toda na área 'a'
 				if (a.centro()) {
 					// Se a área 'a' é o centro, então desenha a reta
-					g.drawPolygon(xPoints, yPoints, xPoints.length);
+					
+					int[] xPointsT = new int[xPoints.length];
+					int[] yPointsT = new int[yPoints.length];
+
+					for (int k = 0; k < yPointsT.length; k++) {
+						xPointsT[k] = (int) new Transformadora()
+								.transVPx(xPoints[k]);
+						yPointsT[k] = (int) new Transformadora()
+								.transVPx(yPoints[k]);
+					}
+					
+					g.drawPolygon(xPointsT, yPointsT, xPoints.length);
 				}
 			} else {
 				if (a.contemUmPto(xPoints, yPoints)) {
@@ -176,7 +188,7 @@ public class CohenSutherland implements TipoClipador {
 	}
 
 	@Override
-	public int[][] cliparPoligono(Graphics g, boolean clipping) {
+	public double[][] cliparPoligono(Graphics g, boolean clipping) {
 		// TODO Auto-generated method stub
 		return null;
 	}

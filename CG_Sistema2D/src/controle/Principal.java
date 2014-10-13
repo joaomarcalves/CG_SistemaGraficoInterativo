@@ -2,8 +2,8 @@ package controle;
 
 import visao.InterfaceGrafica;
 /*
- * Grupo:	João Marcus Alves    - 07132067
- * 			André Vargas Azevedo - 09132004
+ * Grupo:	João Marcus Alves    - 07132067 (85%)
+ * 			André Vargas Azevedo - 09132004 (15%)
  * 
  * java version "1.7.0_55"
  * OpenJDK Runtime Environment (IcedTea 2.4.7) (7u55-2.4.7-1ubuntu1)

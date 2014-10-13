@@ -13,6 +13,7 @@ import modelo.Janela;
 import modelo.Ponto3D;
 import modelo.TipoClipador;
 import modelo.TipoObjeto;
+import modelo.Transformadora;
 import Jama.Matrix;
 
 public class CanvasViewPort extends Canvas {
@@ -26,10 +27,9 @@ public class CanvasViewPort extends Canvas {
 	private double xMin;
 	private double yMax;
 	private double yMin;
-	private double zMax;
-	private double zMin;
 	private Polygon areaDesenhavel;
 	private boolean clipping;
+	private Ponto3D cop;
 
 	public void construirViewPort(ArrayList<TipoObjeto> objetos) {
 		// TODO Auto-generated constructor stub
@@ -38,11 +38,12 @@ public class CanvasViewPort extends Canvas {
 		yMax = Janela.getInstance().yMax();
 		xMin = Janela.getInstance().xMin();
 		yMin = Janela.getInstance().yMin();
-		zMin = Janela.getInstance().zMin();
-		zMin = Janela.getInstance().zMin();
 		this.objetos = objetos;
 		this.setSize(new Dimension((int) (xMax - xMin), (int) (yMax - yMin)));
 		this.setBackground(Color.BLACK);
+		ArrayList<CoordenadasHomogeneas> lcop = new ArrayList<CoordenadasHomogeneas>();
+		lcop.add(new CoordenadasHomogeneas(0, 0, -100));
+		cop = new Ponto3D("COP", lcop, null);
 	}
 
 	public void paint(Graphics g) {
@@ -50,10 +51,15 @@ public class CanvasViewPort extends Canvas {
 
 		// Exibindo área desenhável
 		g.setColor(Color.WHITE);
+
+		int[] subCanvasX1 = { -310, -310, 310, 310 };
+		int[] subCanvasY1 = { -310, 310, 310, -310 };
+		areaDesenhavel = new Polygon(subCanvasX1, subCanvasY1, 4);
+
 		int[] subCanvasX = { 30, 30, 650, 650 };
 		int[] subCanvasY = { 30, 650, 650, 30 };
-		areaDesenhavel = new Polygon(subCanvasX, subCanvasY, 4);
-		g.drawPolygon(areaDesenhavel);
+		Polygon quadradoBranco = new Polygon(subCanvasX, subCanvasY, 4);
+		g.drawPolygon(quadradoBranco);
 
 		// Exibindo os objetos
 		desenharObjetos(g);
@@ -63,49 +69,66 @@ public class CanvasViewPort extends Canvas {
 		for (TipoObjeto o : objetos) {
 			ArrayList<CoordenadasHomogeneas> lC = o.coordenadas();
 			g.setColor(o.cor());
-			int[] xPoints = new int[lC.size()];
-			int[] yPoints = new int[lC.size()];
-			int[] zPoints = new int[lC.size()];
+			double[] xPoints = new double[lC.size()];
+			double[] yPoints = new double[lC.size()];
+			double[] zPoints = new double[lC.size()];
 			for (CoordenadasHomogeneas c : lC) {
-				xPoints[lC.indexOf(c)] = (int) transformadaViewPortX(c.getXD());
-				yPoints[lC.indexOf(c)] = (int) transformadaViewPortY(c.getYD());
-				zPoints[lC.indexOf(c)] = (int) transformadaViewPortZ(c.getZD());
+				xPoints[lC.indexOf(c)] = c.getXD();
+				yPoints[lC.indexOf(c)] = c.getYD();
+				zPoints[lC.indexOf(c)] = c.getZD();
 			}
 
 			if (o.nome().startsWith("P")) {
 				if (o.getClass().getSimpleName().equals("Ponto")) {
-					clipparPonto(g, o, lC);
+					clipparPonto(g, xPoints, yPoints, zPoints);
 				} else
-					clipparPonto3D(g, o, lC);
+					projetarPonto3D(g, xPoints, yPoints, zPoints);
 			} else if (o.nome().startsWith("R")) {
 				if (o.getClass().getSimpleName().equals("Reta"))
 					clipparReta(g, xPoints, yPoints);
 				else
-					projeçãoReta(g, xPoints, yPoints, zPoints);
+					// Reta 3D
+					projetarReta3D(g, xPoints, yPoints, zPoints);
 			} else if (o.nome().startsWith("O")) {
 				if (clipping) {
 					clipparPoligono(g, xPoints, yPoints, o.preenchido());
 				} else {
-					g.drawPolygon(xPoints, yPoints, xPoints.length);
+					int[] xPointsT = new int[xPoints.length];
+					int[] yPointsT = new int[yPoints.length];
+
+					for (int j = 0; j < yPointsT.length; j++) {
+						xPointsT[j] = (int) new Transformadora()
+								.transVPx(xPoints[j]);
+						yPointsT[j] = (int) new Transformadora()
+								.transVPy(yPoints[j]);
+					}
+					g.drawPolygon(xPointsT, yPointsT, xPointsT.length);
 					if (o.preenchido()) {
-						g.fillPolygon(xPoints, yPoints, xPoints.length);
+						g.fillPolygon(xPointsT, yPointsT, xPointsT.length);
 					}
 				}
 			} else if (clipping) {
 				clipparCurvas(g, xPoints, yPoints);
 			} else {
-				g.drawPolyline(xPoints, yPoints, xPoints.length);
+				int[] xPointsT = new int[xPoints.length];
+				int[] yPointsT = new int[yPoints.length];
+
+				for (int j = 0; j < yPointsT.length; j++) {
+					xPointsT[j] = (int) new Transformadora()
+							.transVPx(xPoints[j]);
+					yPointsT[j] = (int) new Transformadora()
+							.transVPy(yPoints[j]);
+				}
+				g.drawPolygon(xPointsT, yPointsT, xPointsT.length);
+				g.drawPolyline(xPointsT, yPointsT, xPoints.length);
 			}
 		}
 	}
 
-	private void projeçãoReta(Graphics g, int[] xPoints, int[] yPoints,
-			int[] zPoints) {
+	private void projetarReta3D(Graphics g, double[] xPoints, double[] yPoints,
+			double[] zPoints) {
 
 		// TODO Auto-generated method stub
-		ArrayList<CoordenadasHomogeneas> lcop = new ArrayList<CoordenadasHomogeneas>();
-		lcop.add(new CoordenadasHomogeneas(0, 0, -120));
-		Ponto3D cop = new Ponto3D("COP", lcop, null);
 		double d = Math.abs(cop.getZ());
 		Matrix mper = new FabricaMatriz().matrizMper(d);
 
@@ -140,49 +163,61 @@ public class CanvasViewPort extends Canvas {
 		clipparReta(g, xPoints, yPoints);
 	}
 
-	private void clipparPonto3D(Graphics g, TipoObjeto o,
-			ArrayList<CoordenadasHomogeneas> lC) {
+	private void projetarPonto3D(Graphics g, double[] xPoints,
+			double[] yPoints, double[] zPoints) {
 		// TODO Auto-generated method stub
-		double xNT = lC.get(0).getXD();
-		double yNT = lC.get(0).getYD();
-		double zNT = lC.get(0).getZD();
-		int xT = (int) transformadaViewPortX(xNT);
-		int yT = (int) transformadaViewPortY(yNT);
-		int zT = (int) transformadaViewPortZ(zNT);
+		double d = Math.abs(cop.getZ());
+		Matrix mper = new FabricaMatriz().matrizMper(d);
+		System.out.println("velho x: " + xPoints[0] + " y: " + yPoints[0]);
 
-		g.setColor(o.cor());
+		Matrix p1 = new Matrix(4, 1);
+		p1.set(0, 0, xPoints[0]);
+		p1.set(1, 0, yPoints[0]);
+		p1.set(2, 0, zPoints[0]);
+		p1.set(3, 0, 1);
 
-		g.drawLine(xT, yT, xT, yT);
-		/*
-		 * if (areaDesenhavel.contains(xT, yT)) { g.drawLine(xT, yT, xT, yT); }
-		 * else if (!clipping) { g.drawLine(xT, yT, xT, yT);
-		 * System.out.println("Ponto fora da área desenhável"); }
-		 */
+		Matrix pW1 = mper.times(p1);
+		
+		for (int i = 0; i < pW1.getColumnDimension(); i++) {
+			for (int j = 0; j < pW1.getRowDimension(); j++) {
+				System.out.println(pW1.get(j, i));
+			}
+			System.out.println("");
+		}
+
+		xPoints[0] = (int) (pW1.get(0, 0) / (pW1.get(2, 0) / d));
+		yPoints[0] = (int) (pW1.get(1, 0) / (pW1.get(2, 0) / d));
+		zPoints[0] = (int) (d);
+
+		System.out.println("novo x: " + xPoints[0] + " y: " + yPoints[0]);
+
+		clipparPonto(g, xPoints, yPoints, zPoints);
+
 	}
 
-	private void clipparPoligono(Graphics g, int[] xPoints, int[] yPoints,
-			boolean preenchido) {
+	private void clipparPoligono(Graphics g, double[] xPoints,
+			double[] yPoints, boolean preenchido) {
 		// TODO Auto-generated method stub
 		System.out
 				.println("Fazendo Clipping da polígono usando o algoritmo de Liang Barsky");
-		ArrayList<int[]> segmentosX = new ArrayList<int[]>();
-		ArrayList<int[]> segmentosY = new ArrayList<int[]>();
+		ArrayList<double[]> segmentosX = new ArrayList<double[]>();
+		ArrayList<double[]> segmentosY = new ArrayList<double[]>();
 		for (int i = 0; i < xPoints.length; i++) {
 			if (i != (xPoints.length - 1)) {
-				int[] segmentoRetaX = { xPoints[i], xPoints[i + 1] };
-				int[] segmentoRetaY = { yPoints[i], yPoints[i + 1] };
+				double[] segmentoRetaX = { xPoints[i], xPoints[i + 1] };
+				double[] segmentoRetaY = { yPoints[i], yPoints[i + 1] };
 				segmentosX.add(segmentoRetaX);
 				segmentosY.add(segmentoRetaY);
 			} else {
-				int[] segmentoRetaX = { xPoints[i], xPoints[0] };
-				int[] segmentoRetaY = { yPoints[i], yPoints[0] };
+				double[] segmentoRetaX = { xPoints[i], xPoints[0] };
+				double[] segmentoRetaY = { yPoints[i], yPoints[0] };
 				segmentosX.add(segmentoRetaX);
 				segmentosY.add(segmentoRetaY);
 			}
 		}
-		int[][] pontos = null;
-		ArrayList<Integer> newX = new ArrayList<Integer>();
-		ArrayList<Integer> newY = new ArrayList<Integer>();
+		double[][] pontos = null;
+		ArrayList<Double> newX = new ArrayList<Double>();
+		ArrayList<Double> newY = new ArrayList<Double>();
 		for (int i = 0; i < segmentosX.size(); i++) {
 			TipoClipador lB = new LiangBarsky(segmentosX.get(i),
 					segmentosY.get(i), areaDesenhavel);
@@ -192,7 +227,17 @@ public class CanvasViewPort extends Canvas {
 					newX.add(pontos[0][j]);
 					newY.add(pontos[1][j]);
 				}
-				g.drawPolygon(pontos[0], pontos[1], pontos[0].length);
+
+				int[] xPointsT = new int[pontos[0].length];
+				int[] yPointsT = new int[pontos[1].length];
+
+				for (int j = 0; j < yPointsT.length; j++) {
+					xPointsT[j] = (int) new Transformadora()
+							.transVPx(pontos[0][j]);
+					yPointsT[j] = (int) new Transformadora()
+							.transVPy(pontos[1][j]);
+				}
+				g.drawPolygon(xPointsT, yPointsT, pontos[0].length);
 			}
 		}
 
@@ -200,30 +245,32 @@ public class CanvasViewPort extends Canvas {
 		int[] ptosY = new int[newX.size() * 2];
 
 		for (int i = 0; i < newX.size(); i++) {
-			ptosX[i] = newX.get(i);
-			ptosY[i] = newY.get(i);
+			ptosX[i] = (int) new Transformadora().transVPx(newX.get(i));
+			ptosY[i] = (int) new Transformadora().transVPy(newY.get(i));
 		}
-		if (preenchido)
+		if (preenchido) {
 			g.fillPolygon(ptosX, ptosY, ptosX.length);
+		}
+
 	}
 
-	private void clipparCurvas(Graphics g, int[] xPoints, int[] yPoints) {
+	private void clipparCurvas(Graphics g, double[] xPoints, double[] yPoints) {
 		// TODO Auto-generated method stub
 		System.out
 				.println("Fazendo Clipping da curva usando o algoritmo de Liang Barsky");
 
-		ArrayList<int[]> segmentosX = new ArrayList<int[]>();
-		ArrayList<int[]> segmentosY = new ArrayList<int[]>();
+		ArrayList<double[]> segmentosX = new ArrayList<double[]>();
+		ArrayList<double[]> segmentosY = new ArrayList<double[]>();
 
 		for (int i = 0; i < xPoints.length; i++) {
 			if (i != (xPoints.length - 1)) {
-				int[] segmentoRetaX = { xPoints[i], xPoints[i + 1] };
-				int[] segmentoRetaY = { yPoints[i], yPoints[i + 1] };
+				double[] segmentoRetaX = { xPoints[i], xPoints[i + 1] };
+				double[] segmentoRetaY = { yPoints[i], yPoints[i + 1] };
 				segmentosX.add(segmentoRetaX);
 				segmentosY.add(segmentoRetaY);
 			}
 		}
-		int[][] pontos = null;
+		double[][] pontos = null;
 
 		for (int i = 0; i < yPoints.length; i++) {
 			for (int j = 0; j < segmentosX.size(); j++) {
@@ -231,13 +278,24 @@ public class CanvasViewPort extends Canvas {
 						segmentosY.get(j), areaDesenhavel);
 				pontos = lB.cliparPoligono(g, clipping);
 				if (pontos != null) {
-					g.drawPolyline(pontos[0], pontos[1], pontos[0].length);
+
+					int[] xPointsT = new int[pontos[0].length];
+					int[] yPointsT = new int[pontos[1].length];
+
+					for (int k = 0; k < yPointsT.length; k++) {
+						xPointsT[k] = (int) new Transformadora()
+								.transVPx(pontos[0][k]);
+						yPointsT[k] = (int) new Transformadora()
+								.transVPy(pontos[1][k]);
+					}
+
+					g.drawPolyline(xPointsT, yPointsT, pontos[0].length);
 				}
 			}
 		}
 	}
 
-	private void clipparReta(Graphics g, int[] xPoints, int[] yPoints) {
+	private void clipparReta(Graphics g, double[] xPoints, double[] yPoints) {
 		switch (InterfaceGrafica.getInstance().algoClipping()) {
 		case LIANG_BARSKY:
 			liangBarsky(g, xPoints, yPoints);
@@ -246,13 +304,20 @@ public class CanvasViewPort extends Canvas {
 			if (clipping) {
 				cohenSutherland(g, xPoints, yPoints);
 			} else {
-				g.drawPolygon(xPoints, yPoints, xPoints.length);
+				int xPointsT[] = new int[2];
+				int yPointsT[] = new int[2];
+				xPointsT[0] = (int) new Transformadora().transVPx(xPoints[0]);
+				xPointsT[1] = (int) new Transformadora().transVPx(xPoints[1]);
+				yPointsT[0] = (int) new Transformadora().transVPy(yPoints[0]);
+				yPointsT[1] = (int) new Transformadora().transVPy(yPoints[1]);
+
+				g.drawPolygon(xPointsT, yPointsT, xPointsT.length);
 			}
 			break;
 		}
 	}
 
-	private void cohenSutherland(Graphics g, int[] xPoints, int[] yPoints) {
+	private void cohenSutherland(Graphics g, double[] xPoints, double[] yPoints) {
 		System.out
 				.println("Fazendo Clipping da reta usando o algoritmo de Cohen-Sutherland");
 		TipoClipador cS = new CohenSutherland(xPoints, yPoints, areaDesenhavel);
@@ -260,47 +325,42 @@ public class CanvasViewPort extends Canvas {
 
 	}
 
-	private void liangBarsky(Graphics g, int[] xPoints, int[] yPoints) {
+	private void liangBarsky(Graphics g, double[] xPoints, double[] yPoints) {
 		System.out
 				.println("Fazendo Clipping da reta usando o algoritmo de Liang Barsky");
 		TipoClipador lB = new LiangBarsky(xPoints, yPoints, areaDesenhavel);
 		lB.clipar(g, clipping);
 	}
 
-	private void clipparPonto(Graphics g, TipoObjeto o,
-			ArrayList<CoordenadasHomogeneas> lC) {
+	private void clipparPonto(Graphics g, double[] xPoints, double[] yPoints,
+			double[] zPoints) {
 
-		double xNT = lC.get(0).getXD();
-		double yNT = lC.get(0).getYD();
-		int xT = (int) transformadaViewPortX(xNT);
-		int yT = (int) transformadaViewPortY(yNT);
-		g.setColor(o.cor());
-		if (areaDesenhavel.contains(xT, yT)) {
+		double x = xPoints[0];
+		double y = yPoints[0];
+		System.out.println("lol 1");
+		if (areaDesenhavel.contains(x, y)) {
+			System.out.println("lol 2");
+			int xT = (int) transformadaViewPortX(x);
+			int yT = (int) transformadaViewPortY(y);
 			g.drawLine(xT, yT, xT, yT);
-		} else if (!clipping) {
-			g.drawLine(xT, yT, xT, yT);
+		} else {
 			System.out.println("Ponto fora da área desenhável");
+			if (!clipping) {
+				int xT = (int) transformadaViewPortX(x);
+				int yT = (int) transformadaViewPortY(y);
+				g.drawLine(xT, yT, xT, yT);
+			}
 		}
 
 	}
 
 	private double transformadaViewPortX(double x) {
 		// TODO Auto-generated method stub
-		return (int) (((x - Janela.getInstance().xMin()) / (Janela
-				.getInstance().xMax() - Janela.getInstance().xMin())) * (xMax - xMin));
+		return new Transformadora().transVPx(x);
 	}
 
 	private double transformadaViewPortY(double y) {
-		return (((1 - (y - Janela.getInstance().yMin())
-				/ (Janela.getInstance().yMax() - Janela.getInstance().yMin()))) * (yMax - yMin));
-	}
-
-	private int transformadaViewPortZ(double z) {
-		// TODO Auto-generated method stub
-		return (int) z;
-		// (((z - Janela.getInstance().zMin()) / (Janela
-		// .getInstance().zMax() - Janela.getInstance().zMin())) * (zMax -
-		// zMin));
+		return new Transformadora().transVPy(y);
 	}
 
 	public void setClipping(boolean clipping) {

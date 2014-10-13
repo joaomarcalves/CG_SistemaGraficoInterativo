@@ -91,7 +91,6 @@ public class Janela {
 		// TODO Auto-generated method stub
 		ArrayList<TipoObjeto> objts = Mundo.getInstance().objetos();
 		for (TipoObjeto obj : objts) {
-
 			obj.moverSeWin(Direcoes.DIREITA);
 		}
 

@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import modelo.TipoClipador;
+import modelo.Transformadora;
 
 public class LiangBarsky implements TipoClipador {
 
-	private int[] xPoints;
-	private int[] yPoints;
+	private double[] xPoints;
+	private double[] yPoints;
 
 	double p1;
 	double p2;
@@ -28,7 +29,8 @@ public class LiangBarsky implements TipoClipador {
 	private ArrayList<Double> r2k = new ArrayList<Double>();
 	private Polygon areaDesenhavel;
 
-	public LiangBarsky(int[] xPoints, int[] yPoints, Polygon areaDesenhavel) {
+	public LiangBarsky(double[] xPoints, double[] yPoints,
+			Polygon areaDesenhavel) {
 
 		this.areaDesenhavel = areaDesenhavel;
 		this.xPoints = xPoints;
@@ -102,14 +104,29 @@ public class LiangBarsky implements TipoClipador {
 				xPoints[1] = (int) x;
 				yPoints[1] = (int) y;
 			}
-			g.drawPolygon(xPoints, yPoints, nPoints);
+
+			int[] xPointsT = new int[2];
+			xPointsT[0] = (int) new Transformadora().transVPx(xPoints[0]);
+			xPointsT[1] = (int) new Transformadora().transVPx(xPoints[1]);
+			int[] yPointsT = new int[2];
+			yPointsT[0] = (int) new Transformadora().transVPy(yPoints[0]);
+			yPointsT[1] = (int) new Transformadora().transVPy(yPoints[1]);
+
+			g.drawPolygon(xPointsT, yPointsT, nPoints);
 		} else if (!clipping) {
-			g.drawPolygon(xPoints, yPoints, nPoints);
+			int[] xPointsT = new int[2];
+			xPointsT[0] = (int) new Transformadora().transVPx(xPoints[0]);
+			xPointsT[1] = (int) new Transformadora().transVPx(xPoints[1]);
+			int[] yPointsT = new int[2];
+			yPointsT[0] = (int) new Transformadora().transVPy(yPoints[0]);
+			yPointsT[1] = (int) new Transformadora().transVPy(yPoints[1]);
+
+			g.drawPolygon(xPointsT, yPointsT, nPoints);
 		}
 	}
 
 	@Override
-	public int[][] cliparPoligono(Graphics g, boolean clipping) {
+	public double[][] cliparPoligono(Graphics g, boolean clipping) {
 		// TODO Auto-generated method stub
 		if ((xPoints[0] == xPoints[1])) {
 			if (xPoints[0] >= areaDesenhavel.getBounds().getMinY()
@@ -127,7 +144,7 @@ public class LiangBarsky implements TipoClipador {
 		return null;
 	}
 
-	private int[][] desenhaPol(Graphics g, boolean clipping) {
+	private double[][] desenhaPol(Graphics g, boolean clipping) {
 		for (int i = 0; i < 4; i++) {
 			if (pk[i] < 0) {
 				r1k.add(qk[i] / pk[i]);
@@ -164,10 +181,19 @@ public class LiangBarsky implements TipoClipador {
 				yPoints[0] = (int) y0;
 			}
 			// g.drawPolygon(xPoints, yPoints, nPoints);
-			int[][] pontos = { xPoints, yPoints };
+			double[][] pontos = { xPoints, yPoints };
 			return pontos;
 		} else if (!clipping) {
-			g.drawPolygon(xPoints, yPoints, nPoints);
+
+			int[] xPointsT = new int[xPoints.length];
+			int[] yPointsT = new int[yPoints.length];
+
+			for (int i = 0; i < xPointsT.length; i++) {
+				xPointsT[i] = (int) new Transformadora().transVPx(xPoints[i]);
+				yPointsT[i] = (int) new Transformadora().transVPy(yPoints[i]);
+			}
+
+			g.drawPolygon(xPointsT, yPointsT, nPoints);
 		}
 		return null;
 	}

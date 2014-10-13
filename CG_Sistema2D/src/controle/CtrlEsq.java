@@ -22,8 +22,6 @@ public class CtrlEsq implements ActionListener, KeyListener {
 	private void moverEsq() {
 		// TODO Auto-generated method stub
 		InterfaceGrafica.getInstance().moverJanela(Direcoes.ESQUERDA);
-
-		
 	}
 
 	@Override

@@ -2,14 +2,14 @@ package modelo;
 
 public interface TipoArea {
 
-	boolean contemRetaCompleta(int[] xPoints, int[] yPoints);
-
 	boolean centro();
 
-	boolean contemUmPto(int[] xPoints, int[] yPoints);
+	boolean contemUmPto(double[] xPoints, double[] yPoints);
 
 	int[] codigo();
 
 	String nome();
+
+	boolean contemRetaCompleta(double[] xPoints, double[] yPoints);
 
 }
