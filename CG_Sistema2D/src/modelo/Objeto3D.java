@@ -25,7 +25,8 @@ public class Objeto3D extends Objeto {
 	}
 
 	public static TipoObjeto criarReta(String nome,
-			CoordenadasHomogeneas coordenadas, CoordenadasHomogeneas coordenadas2, Color cor) {
+			CoordenadasHomogeneas coordenadas,
+			CoordenadasHomogeneas coordenadas2, Color cor) {
 		// TODO Auto-generated method stub
 		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
@@ -38,7 +39,8 @@ public class Objeto3D extends Objeto {
 	}
 
 	public static TipoObjeto criarPoligono(String nome,
-			ArrayList<CoordenadasHomogeneas> listCord, Color cor, boolean preenchido) {
+			ArrayList<CoordenadasHomogeneas> listCord, Color cor,
+			boolean preenchido) {
 		// TODO Auto-generated method stub
 		TipoObjeto o = new Poligono3D(nome, listCord, cor, preenchido);
 		o.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -118,56 +120,55 @@ public class Objeto3D extends Objeto {
 		}
 	}
 
-	public void rotacionarSe(double g) {
+	public void rotacionarSe(double graus, Eixo e) {
 		CoordenadasHomogeneas co = this.centro();
-
+		CoordenadasHomogeneas coW = this.centroWin();
 		FabricaMatriz m = new FabricaMatriz();
 		Matrix t1 = m.matrizTranslação(-co.getXD(), -co.getYD(), -co.getZD());
-		Matrix t1Win = m.matrizTranslação(-this.centroWin().getXD(), -this.centroWin().getYD(), -this.centroWin().getZD());
-		Matrix rx = m.matrizRotaçãoX(g);
-		Matrix ry = m.matrizRotaçãoY(g);
-		Matrix rz = m.matrizRotaçãoZ(g);
+		Matrix t1Win = m.matrizTranslação(-coW.getXD(), -coW.getYD(),
+				-coW.getZD());
+		Matrix rx = m.matrizRotaçãoX(graus);
 		Matrix t2 = m.matrizTranslação(co.getXD(), co.getYD(), co.getZD());
-		Matrix t2Win = m.matrizTranslação(this.centroWin().getXD(), this.centroWin().getYD(), this.centroWin().getZD());
-
+		Matrix t2Win = m
+				.matrizTranslação(coW.getXD(), coW.getYD(), coW.getZD());
 
 		Matrix coord = new Matrix(1, 4);
-		for (CoordenadasHomogeneas c : listaCoord) {
-			coord.set(0, 0, c.getXD());
-			coord.set(0, 1, c.getYD());
-			coord.set(0, 2, c.getZD());
-			coord.set(0, 3, 1.0);
+		if (e == Eixo.X) {
+			for (CoordenadasHomogeneas c : listaCoord) {
+				coord.set(0, 0, c.getXD());
+				coord.set(0, 1, c.getYD());
+				coord.set(0, 2, c.getZD());
+				coord.set(0, 3, 1.0);
 
-			Matrix resultado = coord.times(t1);
-			resultado = resultado.times(rx);
-			resultado = resultado.times(rz);
-			resultado = resultado.times(ry);
-			resultado = resultado.times(rz);
-			resultado = resultado.times(rx);
-			resultado = resultado.times(t2);
+				Matrix resultado = coord.times(t1);
+				resultado = resultado.times(rx);
+				resultado = resultado.times(t2);
 
-			c.setX(resultado.get(0, 0));
-			c.setY(resultado.get(0, 1));
-			c.setZ(resultado.get(0, 2));
-		}
-		for (CoordenadasHomogeneas cW : listaCoordWin) {
-			coord.set(0, 0, cW.getXD());
-			coord.set(0, 1, cW.getYD());
-			coord.set(0, 2, cW.getZD());
-			coord.set(0, 3, 1.0);
+				c.setX(resultado.get(0, 0));
+				c.setY(resultado.get(0, 1));
+				c.setZ(resultado.get(0, 2));
+			}
 
-			Matrix resultado = coord.times(t1Win);
-			resultado = resultado.times(rx);
-			resultado = resultado.times(rz);
-			resultado = resultado.times(ry);
-			resultado = resultado.times(rz);
-			resultado = resultado.times(rx);
-			resultado = resultado.times(t2Win);
+			for (CoordenadasHomogeneas cW : listaCoordWin) {
+				coord.set(0, 0, cW.getXD());
+				coord.set(0, 1, cW.getYD());
+				coord.set(0, 2, cW.getZD());
+				coord.set(0, 3, 1.0);
 
-			cW.setX(resultado.get(0, 0));
-			cW.setY(resultado.get(0, 1));
-			cW.setZ(resultado.get(0, 2));
+				Matrix resultado = coord.times(t1Win);
+				resultado = resultado.times(rx);
+				resultado = resultado.times(t2Win);
+
+				cW.setX(resultado.get(0, 0));
+				cW.setY(resultado.get(0, 1));
+				cW.setZ(resultado.get(0, 2));
+			}
 		}
 
+		if (e == null) {
+			// atualizarCoordenadaObjeto(t1, rx, ry, rz, t2, coord);
+			// atualizarCoordenadaJanela(t1Win, rx, ry, rz, t2Win, coord);
+		}
 	}
+
 }

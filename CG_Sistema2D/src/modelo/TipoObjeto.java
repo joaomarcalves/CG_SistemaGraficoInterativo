@@ -20,6 +20,8 @@ public interface TipoObjeto {
 	Color cor();
 
 	void rotacionarSe(double graus);
+	
+	void rotacionarSe(double parseDouble, Eixo x);
 
 	void rotacionarOrigem(double graus);
 
@@ -32,5 +34,4 @@ public interface TipoObjeto {
 	boolean preenchido();
 
 	void moverSe(double dX, double dY, double dZ);
-
 }

@@ -15,7 +15,8 @@ public class InterpretadorObj {
 	private Color cor;
 	private int escal;
 
-	public InterpretadorObj(File selectedFile, Color cor, int escal) throws IOException {
+	public InterpretadorObj(File selectedFile, Color cor, int escal)
+			throws IOException {
 		// TODO Auto-generated constructor stub
 		file = selectedFile;
 		this.cor = cor;
@@ -34,18 +35,31 @@ public class InterpretadorObj {
 
 			if (tipo.equals("v")) {
 				coord = new CoordenadasHomogeneas(
-						(escal * Double.parseDouble(campos[1])),
-						escal * Double.parseDouble(campos[2]),
-						escal * Double.parseDouble(campos[3]));
+						(escal * Double.parseDouble(campos[1])), escal
+								* Double.parseDouble(campos[2]), escal
+								* Double.parseDouble(campos[3]));
 				listaCoords.add(coord);
 			}
 
 			if (tipo.equals("f")) {
 				subListaCoords = new ArrayList<CoordenadasHomogeneas>();
 				for (int i = 1; i < campos.length; i++) {
-					subListaCoords.add(listaCoords.get(Integer.parseInt((campos[i].split("/")[0])) - 1));
+					subListaCoords.add(listaCoords.get(Integer
+							.parseInt((campos[i].split("/")[0])) - 1));
 				}
-				Mundo.getInstance().incluirObjeto(subListaCoords, cor, false);
+				boolean o3d = false;
+				for (CoordenadasHomogeneas c : listaCoords) {
+					if (c.getZD() != 1.0) {
+						o3d = true;
+					}
+				}
+				if (o3d) {
+					Mundo.getInstance().incluirObjeto3D(subListaCoords, cor,
+							false);
+				} else {
+					Mundo.getInstance().incluirObjeto(subListaCoords, cor,
+							false);
+				}
 			}
 		}
 		br.close();

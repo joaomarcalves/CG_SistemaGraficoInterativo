@@ -2,6 +2,7 @@ package modelo;
 
 import java.awt.Color;
 import java.util.ArrayList;
+
 import Jama.Matrix;
 
 public abstract class Objeto implements TipoObjeto {
@@ -46,7 +47,8 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarReta(String nome,
-			CoordenadasHomogeneas coordenadas, CoordenadasHomogeneas coordenadas2, Color cor) {
+			CoordenadasHomogeneas coordenadas,
+			CoordenadasHomogeneas coordenadas2, Color cor) {
 		// TODO Auto-generated method stub
 		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
@@ -59,7 +61,8 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public static TipoObjeto criarPoligono(String nome,
-			ArrayList<CoordenadasHomogeneas> listCord, Color cor, boolean preenchido) {
+			ArrayList<CoordenadasHomogeneas> listCord, Color cor,
+			boolean preenchido) {
 		// TODO Auto-generated method stub
 		TipoObjeto o = new Poligono(nome, listCord, cor, preenchido);
 		o.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
@@ -247,10 +250,11 @@ public abstract class Objeto implements TipoObjeto {
 		for (CoordenadasHomogeneas c : listaCoord) {
 			ccX += c.getXD();
 			ccY += c.getYD();
-			// ccZ += c.getZ();
+			ccZ += c.getZD();
 		}
 		ccX = ccX / listaCoord.size();
 		ccY = ccY / listaCoord.size();
+		ccZ = ccZ / listaCoord.size();
 		return new CoordenadasHomogeneas(ccX, ccY, ccZ);
 	}
 
@@ -346,8 +350,8 @@ public abstract class Objeto implements TipoObjeto {
 		double coordenadaX;
 		double coordenadaY;
 
-		CoordenadasHomogeneas co = new CoordenadasHomogeneas(Double.parseDouble(eX),
-				Double.parseDouble(eY), 1);
+		CoordenadasHomogeneas co = new CoordenadasHomogeneas(
+				Double.parseDouble(eX), Double.parseDouble(eY), 1);
 
 		double cX = co.getXD();
 		double cY = co.getYD();
@@ -367,8 +371,8 @@ public abstract class Objeto implements TipoObjeto {
 			c.setY(coordenadaY);
 		}
 
-		CoordenadasHomogeneas coN = new CoordenadasNorm(
-				Double.parseDouble(eX), Double.parseDouble(eY), 1);
+		CoordenadasHomogeneas coN = new CoordenadasNorm(Double.parseDouble(eX),
+				Double.parseDouble(eY), 1);
 
 		double cXwin = coN.getXD();
 		double cYwin = coN.getYD();
@@ -525,5 +529,9 @@ public abstract class Objeto implements TipoObjeto {
 
 		}
 		return ptsCurva;
+	}
+
+	public void rotacionarSe(double parseDouble, Eixo x) {
+		System.out.println("oops");
 	}
 }

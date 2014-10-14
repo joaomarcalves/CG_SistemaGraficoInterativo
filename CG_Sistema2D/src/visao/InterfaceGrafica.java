@@ -46,10 +46,11 @@ import controle.CtrlMais;
 import controle.CtrlMaisEscal;
 import controle.CtrlMenos;
 import controle.CtrlMenosEscal;
-import controle.CtrlTrans3D;
 import controle.CtrlRot;
 import controle.CtrlRotWin;
+import controle.CtrlSelecTd;
 import controle.CtrlTamPasso;
+import controle.CtrlTrans3D;
 
 public class InterfaceGrafica extends JFrame implements WindowListener {
 
@@ -139,6 +140,11 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	private CtrlCriarObjt3D ctrlCriarObjt3D;
 	private JButton btTrans3D;
 	private CtrlTrans3D ctrlNav3D;
+	private JRadioButton tipoX;
+	private JRadioButton tipoY;
+	private JRadioButton tipoZ;
+	private JButton btSelecTudo;
+	private CtrlSelecTd ctrlSelecTd;
 
 	private InterfaceGrafica() {
 		// Criar controlador de configuração
@@ -235,6 +241,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		ctrlBaixo = new CtrlBaixo();
 		ctrlDir = new CtrlDir();
 		ctrlRotWin = new CtrlRotWin(entryGrausWin);
+		ctrlSelecTd = new CtrlSelecTd();
 
 		// Criação dos labels
 		lblObjeto = new JLabel("Display File", JLabel.CENTER);
@@ -245,6 +252,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 
 		// Criação dos botões e adição dos controladores
 		btObjeto3D = new JButton("Criar objeto 3D");
+		btSelecTudo = new JButton("Selecionar tudo");
 		btSpf3D = new JButton("Superfície 3D");
 		btObjeto = new JButton("Criar objeto 2D");
 		btImportar = new JButton("Importar objeto");
@@ -258,6 +266,8 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		btRotWin = new JButton("Rotacionar");
 		btCriarCurva = new JButton("Criar curva 2D");
 
+		btSelecTudo.addActionListener(ctrlSelecTd);
+		btSelecTudo.addKeyListener(ctrlSelecTd);
 		btTrans3D.addActionListener(ctrlNav3D);
 		btTrans3D.addKeyListener(ctrlNav3D);
 		btObjeto3D.addActionListener(ctrlCriarObjt3D);
@@ -311,6 +321,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlCriarImportar.add(btObjeto);
 		pnlCriarImportar.add(btCriarCurva);
 		pnlCriarImportar.add(btImportar);
+		pnlCriarImportar.add(btSelecTudo);
 
 		pnlEsq.add(pnlCriarImportar);
 		pnlEsq.add(lblNav);
@@ -332,9 +343,15 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		tipoCentro.setSelected(true);
 		tipoOrigem = new JRadioButton("Origem");
 		tipoPonto = new JRadioButton("Ponto:");
+		tipoX = new JRadioButton("Eixo x");
+		tipoY = new JRadioButton("Eixo y");
+		tipoZ = new JRadioButton("Eixo z");
 		tipoRot = new ButtonGroup();
 		tipoRot.add(tipoCentro);
 		tipoRot.add(tipoOrigem);
+		tipoRot.add(tipoX);
+		tipoRot.add(tipoY);
+		tipoRot.add(tipoZ);
 		tipoRot.add(tipoPonto);
 
 		// Criação dos controladores de eventos
@@ -345,7 +362,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		ctrlMaisEscal = new CtrlMaisEscal();
 		ctrlMenosEscal = new CtrlMenosEscal();
 		ctrlRot = new CtrlRot(entryGraus, tipoCentro, tipoOrigem, tipoPonto,
-				entryRotX, entryRotY);
+				tipoX, tipoY, tipoZ, entryRotX, entryRotY);
 
 		// Criação dos labels
 		lblTrans = new JLabel("Translação do Objeto", JLabel.CENTER);
@@ -403,6 +420,10 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlDir.add(lblRot);
 		pnlDir.add(entryGraus);
 		pnlTipo = new JPanel();
+		pnlTipo.setLayout(new GridLayout(2, 3));
+		pnlTipo.add(tipoX);
+		pnlTipo.add(tipoY);
+		pnlTipo.add(tipoZ);
 		pnlTipo.add(tipoCentro);
 		pnlTipo.add(tipoOrigem);
 		pnlTipo.add(tipoPonto);
@@ -523,6 +544,14 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	public int[] objetoAtivo() {
 		// TODO Auto-generated method stub
 		return campoDeObjetos.getSelectedIndexes();
+	}
+
+	public void selecionarTds() {
+		// TODO Auto-generated method stub
+		int tam = campoDeObjetos.getItemCount();
+		for (int i = 0; i < tam; i++) {
+			campoDeObjetos.select(i);
+		}
 	}
 
 	public void nenhumObjeto() {

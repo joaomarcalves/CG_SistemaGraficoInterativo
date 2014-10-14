@@ -152,9 +152,10 @@ public class LiangBarsky implements TipoClipador {
 				r2k.add(qk[i] / pk[i]);
 			}
 		}
-
-		double zeta1 = Math.max(0, Collections.max(r1k));
-		double zeta2 = Math.min(1, Collections.min(r2k));
+		r1k.add(0.0);
+		double zeta1 = Collections.max(r1k);
+		r2k.add(1.0);
+		double zeta2 = Collections.min(r2k);
 
 		int nPoints = xPoints.length;
 		if ((zeta1 < zeta2) && clipping) {

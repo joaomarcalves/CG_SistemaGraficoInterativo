@@ -8,12 +8,16 @@ import java.awt.event.KeyListener;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import modelo.Eixo;
 import modelo.Mundo;
 import visao.InterfaceGrafica;
 
 public class CtrlRot implements KeyListener, ActionListener {
 
 	private JTextField graus;
+	private JRadioButton eixoX;
+	private JRadioButton eixoY;
+	private JRadioButton eixoZ;
 	private JRadioButton centro;
 	private JRadioButton origem;
 	private JRadioButton pontoQqr;
@@ -21,10 +25,14 @@ public class CtrlRot implements KeyListener, ActionListener {
 	private JTextField eY;
 
 	public CtrlRot(JTextField entryGraus, JRadioButton centro,
-			JRadioButton origem, JRadioButton pontoQqr, JTextField entryRotX,
+			JRadioButton origem, JRadioButton pontoQqr, JRadioButton eixoX,
+			JRadioButton eixoY, JRadioButton eixoZ, JTextField entryRotX,
 			JTextField entryRotY) {
 		// TODO Auto-generated constructor stub
 		graus = entryGraus;
+		this.eixoX = eixoX;
+		this.eixoY = eixoY;
+		this.eixoZ = eixoZ;
 		this.centro = centro;
 		this.origem = origem;
 		this.pontoQqr = pontoQqr;
@@ -41,39 +49,65 @@ public class CtrlRot implements KeyListener, ActionListener {
 
 	private void rotacionar() {
 		int[] idxObjeto = InterfaceGrafica.getInstance().objetoAtivo();
-		System.out.println("Rotacionar " + graus.getText() + "º");
+		System.out.print("Rotacionar " + graus.getText() + "º ");
 		try {
-			if (centro.isSelected()) {
-				System.out.println("Em torno do seu centro");
+			if (eixoX.isSelected()) {
+				System.out.println("Rotação 3D em torno de X");
 				for (int index : idxObjeto) {
 					Mundo.getInstance().objetos().get(index)
-							.rotacionarSe(Double.parseDouble(graus.getText()));
+							.rotacionarSe(Double.parseDouble(graus.getText()),Eixo.X);
 				}
 				InterfaceGrafica.getInstance().exibirObjetos();
 			} else {
-				if (origem.isSelected()) {
-					System.out.println("Em torno da origem");
-					for (int index : idxObjeto) {
-						Mundo.getInstance()
-								.objetos()
-								.get(index)
-								.rotacionarOrigem(
-										Double.parseDouble(graus.getText()));
-					}
-					InterfaceGrafica.getInstance().exibirObjetos();
+				if (eixoY.isSelected()) {
+
 				} else {
-					if (pontoQqr.isSelected()) {
-						System.out.println("Em torno de um ponto ("
-								+ eX.getText() + ", " + eY.getText() + ")");
-						for (int index : idxObjeto) {
-							Mundo.getInstance()
-									.objetos()
-									.get(index)
-									.rotacionarAoRedorPto(
-											Double.parseDouble(graus.getText()),
-											eX.getText(), eY.getText());
+					if (eixoZ.isSelected()) {
+
+					} else {
+						if (centro.isSelected()) {
+							System.out.println("Em torno do seu centro");
+							for (int index : idxObjeto) {
+								Mundo.getInstance()
+										.objetos()
+										.get(index)
+										.rotacionarSe(
+												Double.parseDouble(graus
+														.getText()));
+							}
+							InterfaceGrafica.getInstance().exibirObjetos();
+						} else {
+							if (origem.isSelected()) {
+								System.out.println("Em torno da origem");
+								for (int index : idxObjeto) {
+									Mundo.getInstance()
+											.objetos()
+											.get(index)
+											.rotacionarOrigem(
+													Double.parseDouble(graus
+															.getText()));
+								}
+								InterfaceGrafica.getInstance().exibirObjetos();
+							} else {
+								if (pontoQqr.isSelected()) {
+									System.out.println("Em torno de um ponto ("
+											+ eX.getText() + ", "
+											+ eY.getText() + ")");
+									for (int index : idxObjeto) {
+										Mundo.getInstance()
+												.objetos()
+												.get(index)
+												.rotacionarAoRedorPto(
+														Double.parseDouble(graus
+																.getText()),
+														eX.getText(),
+														eY.getText());
+									}
+									InterfaceGrafica.getInstance()
+											.exibirObjetos();
+								}
+							}
 						}
-						InterfaceGrafica.getInstance().exibirObjetos();
 					}
 				}
 			}
@@ -89,7 +123,6 @@ public class CtrlRot implements KeyListener, ActionListener {
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		if (arg0.getKeyCode() == 10) {
-			System.out.println("kik");
 			this.rotacionar();
 		}
 	}
