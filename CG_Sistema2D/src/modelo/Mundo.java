@@ -17,8 +17,10 @@ public class Mundo implements TipoMundo {
 	private int quantPts3D;
 	private int quantRts3D;
 	private int quantPol3D;
+	private int quantSpf;
 
 	private Mundo() {
+		quantSpf = 0;
 		quantPts = 0;
 		quantRts = 0;
 		quantPol = 0;
@@ -60,8 +62,8 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto(ArrayList<CoordenadasHomogeneas> listCord, Color cor,
-			boolean preenchido) {
+	public void incluirObjeto(ArrayList<CoordenadasHomogeneas> listCord,
+			Color cor, boolean preenchido) {
 		// TODO Auto-generated method stub
 		quantPol++;
 		displayFile.add(Objeto.criarPoligono(("O" + quantPol), listCord, cor,
@@ -114,12 +116,35 @@ public class Mundo implements TipoMundo {
 	}
 
 	@Override
-	public void incluirObjeto3D(ArrayList<CoordenadasHomogeneas> listCord, Color cor,
-			boolean preenchido) {
+	public void incluirObjeto3D(ArrayList<CoordenadasHomogeneas> listCord,
+			Color cor, boolean preenchido) {
 		// TODO Auto-generated method stub
 		quantPol3D++;
-		displayFile.add(Objeto3D.criarPoligono(("O3D" + quantPol3D), listCord, cor,
-				preenchido));
+		displayFile.add(Objeto3D.criarPoligono(("O3D" + quantPol3D), listCord,
+				cor, preenchido));
+
+	}
+
+	@Override
+	public void incluirSuperficieBicubica(
+			ArrayList<ArrayList<SemiPonto>> curvasCtrl, Color cor) {
+		// TODO Auto-generated method stub
+		quantSpf++;
+		displayFile.add(Objeto3D.criarSpfSpline(("S" + quantSpf), curvasCtrl,
+				cor));
+
+	}
+
+	@Override
+	public void incluirPoliedro(
+			ArrayList<ArrayList<CoordenadasHomogeneas>> listaDeFaces,
+			Color cor, boolean preenchido) {
+		// TODO Auto-generated method stub
+		for (ArrayList<CoordenadasHomogeneas> f : listaDeFaces) {
+			quantPol3D++;
+			displayFile.add(Objeto3D.criarPoligono(("O3D" + quantPol3D), f,
+					cor, preenchido));
+		}
 
 	}
 }

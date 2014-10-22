@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import visao.InterfaceGrafica;
-import modelo.Mundo;
 
 public class CtrlSelecTd implements KeyListener, ActionListener {
 
@@ -23,11 +22,10 @@ public class CtrlSelecTd implements KeyListener, ActionListener {
 
 	}
 
-
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		if(arg0.getKeyCode()==10){
+		if (arg0.getKeyCode() == 10) {
 			selecTd();
 		}
 

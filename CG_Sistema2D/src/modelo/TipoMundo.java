@@ -29,4 +29,11 @@ public interface TipoMundo {
 	void incluirObjeto3D(ArrayList<CoordenadasHomogeneas> listCord, Color cor,
 			boolean preenchido);
 
+	void incluirSuperficieBicubica(ArrayList<ArrayList<SemiPonto>> curvasCtrl,
+			Color color);
+
+	void incluirPoliedro(
+			ArrayList<ArrayList<CoordenadasHomogeneas>> listaDeFaces,
+			Color cor, boolean b);
+
 }

@@ -38,10 +38,6 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 	private JColorChooser corChooser;
 	private CtrlSpline ctrlSpline;
 
-	public CtrlCriarCurva() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub

@@ -28,6 +28,7 @@ public class InterpretadorObj {
 		ArrayList<CoordenadasHomogeneas> subListaCoords = null;
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String linha;
+		ArrayList<ArrayList<CoordenadasHomogeneas>> listaDeFaces = new ArrayList<>();
 		while ((linha = br.readLine()) != null) {
 			String[] campos = linha.split(" ");
 			String tipo = campos[0];
@@ -43,18 +44,23 @@ public class InterpretadorObj {
 
 			if (tipo.equals("f")) {
 				subListaCoords = new ArrayList<CoordenadasHomogeneas>();
-				for (int i = 1; i < campos.length; i++) {
-					subListaCoords.add(listaCoords.get(Integer
-							.parseInt((campos[i].split("/")[0])) - 1));
-				}
 				boolean o3d = false;
 				for (CoordenadasHomogeneas c : listaCoords) {
 					if (c.getZD() != 1.0) {
 						o3d = true;
 					}
 				}
+				for (int i = 1; i < campos.length; i++) {
+					subListaCoords.add(listaCoords.get(Integer
+							.parseInt((campos[i].split("/")[0])) - 1));
+				}
 				if (o3d) {
-					Mundo.getInstance().incluirObjeto3D(subListaCoords, cor,
+					for (int i = 1; i < campos.length; i++) {
+						subListaCoords.add(listaCoords.get(Integer
+								.parseInt((campos[i].split("/")[0])) - 1));
+					}
+					listaDeFaces.add(subListaCoords);
+					Mundo.getInstance().incluirPoliedro(listaDeFaces, cor,
 							false);
 				} else {
 					Mundo.getInstance().incluirObjeto(subListaCoords, cor,

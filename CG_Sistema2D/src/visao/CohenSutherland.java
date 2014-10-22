@@ -106,7 +106,7 @@ public class CohenSutherland implements TipoClipador {
 						xPointsT[k] = (int) new Transformadora()
 								.transVPx(xPoints[k]);
 						yPointsT[k] = (int) new Transformadora()
-								.transVPx(yPoints[k]);
+								.transVPy(yPoints[k]);
 					}
 					
 					g.drawPolygon(xPointsT, yPointsT, xPoints.length);

@@ -25,6 +25,7 @@ public class LiangBarsky implements TipoClipador {
 
 	private double[] pk;
 	private double[] qk;
+	private double[] zPoints;
 	private ArrayList<Double> r1k = new ArrayList<Double>();
 	private ArrayList<Double> r2k = new ArrayList<Double>();
 	private Polygon areaDesenhavel;
@@ -48,6 +49,27 @@ public class LiangBarsky implements TipoClipador {
 		double[] qk = { q1, q2, q3, q4 };
 		this.qk = qk;
 
+	}
+
+	public LiangBarsky(double[] ds, double[] ds2, double[] ds3,
+			Polygon areaDesenhavel2) {
+		// TODO Auto-generated constructor stub
+		this.areaDesenhavel = areaDesenhavel2;
+		this.xPoints = ds;
+		this.yPoints = ds2;
+		this.zPoints = ds3;
+		p1 = xPoints[0] - xPoints[1];
+		p2 = xPoints[1] - xPoints[0];
+		p3 = yPoints[0] - yPoints[1];
+		p4 = yPoints[1] - yPoints[0];
+		double[] pk = { p1, p2, p3, p4 };
+		this.pk = pk;
+		q1 = (xPoints[0] - areaDesenhavel.getBounds().getMinX());
+		q2 = (areaDesenhavel.getBounds().getMaxX() - xPoints[0]);
+		q3 = (yPoints[0] - areaDesenhavel.getBounds().getMinY());
+		q4 = (areaDesenhavel.getBounds().getMaxY() - yPoints[0]);
+		double[] qk = { q1, q2, q3, q4 };
+		this.qk = qk;
 	}
 
 	@Override

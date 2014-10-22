@@ -9,17 +9,18 @@ import java.util.ArrayList;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 
-import visao.InterfaceGrafica;
 import modelo.Mundo;
 import modelo.SemiPonto;
+import visao.InterfaceGrafica;
 
 public class CtrlCriarSpline implements KeyListener, ActionListener {
 
-	private JFrame framePai;
-	private ArrayList<SemiPonto> ptsCtrl;
-	private JColorChooser corChooser;
+	protected JFrame framePai;
+	protected ArrayList<SemiPonto> ptsCtrl;
+	protected JColorChooser corChooser;
 
-	public CtrlCriarSpline(JFrame framePai, ArrayList<SemiPonto> ptsCtrl, JColorChooser corChooser) {
+	public CtrlCriarSpline(JFrame framePai, ArrayList<SemiPonto> ptsCtrl,
+			JColorChooser corChooser) {
 		// TODO Auto-generated constructor stub
 		this.framePai = framePai;
 		this.ptsCtrl = ptsCtrl;
@@ -29,6 +30,10 @@ public class CtrlCriarSpline implements KeyListener, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		criarBCubics();
+	}
+
+	protected void criarBCubics() {
 		framePai.dispose();
 		Mundo.getInstance().incluirCurvaSpline(ptsCtrl, corChooser.getColor());
 		InterfaceGrafica.getInstance().exibirObjetos();

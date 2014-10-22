@@ -7,8 +7,8 @@ import Jama.Matrix;
 
 public abstract class Objeto implements TipoObjeto {
 
-	private static final int DIVISOES = 10;
-	private String nome;
+	protected static final int DIVISOES = 10;
+	protected String nome;
 	protected ArrayList<CoordenadasHomogeneas> listaCoord;
 	protected ArrayList<CoordenadasHomogeneas> listaCoordWin = new ArrayList<CoordenadasHomogeneas>();
 
@@ -459,9 +459,9 @@ public abstract class Objeto implements TipoObjeto {
 		double[] delta2F0 = new double[3];
 		double[] delta3F0 = new double[3];
 
-		FabricaMatriz ma = new FabricaMatriz();
+		FabricaMatriz fab = new FabricaMatriz();
 
-		Matrix gbs = ma.matrizGBS();
+		Matrix gbs = fab.matrizGBS();
 
 		ArrayList<CoordenadasHomogeneas> ptsCurva = new ArrayList<CoordenadasHomogeneas>();
 
@@ -488,8 +488,8 @@ public abstract class Objeto implements TipoObjeto {
 			}
 
 			CoordenadasHomogeneas p = listCoord.get(i);
-			ArrayList<CoordenadasHomogeneas> ptsSegCurva = forwardDifrencies(p,
-					f0, deltaF0, delta2F0, delta3F0);
+			ArrayList<CoordenadasHomogeneas> ptsSegCurva = forwardDiferencies(
+					p, f0, deltaF0, delta2F0, delta3F0);
 
 			for (CoordenadasHomogeneas c : ptsSegCurva) {
 				ptsCurva.add(c);
@@ -503,7 +503,7 @@ public abstract class Objeto implements TipoObjeto {
 		return c;
 	}
 
-	private static ArrayList<CoordenadasHomogeneas> forwardDifrencies(
+	protected static ArrayList<CoordenadasHomogeneas> forwardDiferencies(
 			CoordenadasHomogeneas p, double[] f0, double[] deltaF0,
 			double[] delta2F0, double[] delta3F0) {
 		// TODO Auto-generated method stub
@@ -532,6 +532,20 @@ public abstract class Objeto implements TipoObjeto {
 	}
 
 	public void rotacionarSe(double parseDouble, Eixo x) {
-		System.out.println("oops");
+		System.out.println("Ooops");
 	}
+
+	public void incluirCurvas(ArrayList<TipoObjeto> listaCurvas1,
+			ArrayList<TipoObjeto> listaCurvas2) {
+		System.out.println("Ooops");
+	}
+
+	public ArrayList<TipoObjeto> curva1() {
+		return null;
+	}
+
+	public ArrayList<TipoObjeto> curva2() {
+		return null;
+	}
+
 }

@@ -49,6 +49,7 @@ import controle.CtrlMenosEscal;
 import controle.CtrlRot;
 import controle.CtrlRotWin;
 import controle.CtrlSelecTd;
+import controle.CtrlSpfBCubics;
 import controle.CtrlTamPasso;
 import controle.CtrlTrans3D;
 
@@ -145,6 +146,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	private JRadioButton tipoZ;
 	private JButton btSelecTudo;
 	private CtrlSelecTd ctrlSelecTd;
+	private CtrlSpfBCubics ctrlSpfBCubics;
 
 	private InterfaceGrafica() {
 		// Criar controlador de configuração
@@ -242,6 +244,7 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		ctrlDir = new CtrlDir();
 		ctrlRotWin = new CtrlRotWin(entryGrausWin);
 		ctrlSelecTd = new CtrlSelecTd();
+		ctrlSpfBCubics = new CtrlSpfBCubics();
 
 		// Criação dos labels
 		lblObjeto = new JLabel("Display File", JLabel.CENTER);
@@ -266,6 +269,8 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		btRotWin = new JButton("Rotacionar");
 		btCriarCurva = new JButton("Criar curva 2D");
 
+		btSpf3D.addActionListener(ctrlSpfBCubics);
+		btSpf3D.addKeyListener(ctrlSpfBCubics);
 		btSelecTudo.addActionListener(ctrlSelecTd);
 		btSelecTudo.addKeyListener(ctrlSelecTd);
 		btTrans3D.addActionListener(ctrlNav3D);

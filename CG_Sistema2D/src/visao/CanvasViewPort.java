@@ -27,7 +27,7 @@ public class CanvasViewPort extends Canvas {
 	private double xMin;
 	private double yMax;
 	private double yMin;
-	private Polygon areaDesenhavel;
+	public Polygon areaDesenhavel;
 	private boolean clipping;
 	private Ponto3D cop;
 
@@ -42,7 +42,7 @@ public class CanvasViewPort extends Canvas {
 		this.setSize(new Dimension((int) (xMax - xMin), (int) (yMax - yMin)));
 		this.setBackground(Color.BLACK);
 		ArrayList<CoordenadasHomogeneas> lcop = new ArrayList<CoordenadasHomogeneas>();
-		lcop.add(new CoordenadasHomogeneas(0, 0, -100));
+		lcop.add(new CoordenadasHomogeneas(0, 0, -9));
 		cop = new Ponto3D("COP", lcop, null);
 	}
 
@@ -52,8 +52,8 @@ public class CanvasViewPort extends Canvas {
 		// Exibindo área desenhável
 		g.setColor(Color.WHITE);
 
-		int[] subCanvasX1 = { -310, -310, 310, 310 };
-		int[] subCanvasY1 = { -310, 310, 310, -310 };
+		int[] subCanvasX1 = { -320, -320, 300, 300 };
+		int[] subCanvasY1 = { -320, 300, 300, -320 };
 		areaDesenhavel = new Polygon(subCanvasX1, subCanvasY1, 4);
 
 		int[] subCanvasX = { 30, 30, 650, 650 };
@@ -78,20 +78,76 @@ public class CanvasViewPort extends Canvas {
 				zPoints[lC.indexOf(c)] = c.getZD();
 			}
 
-			if (o.nome().startsWith("P")) {
-				if (o.getClass().getSimpleName().equals("Ponto")) {
-					clipparPonto(g, xPoints, yPoints, zPoints);
-				} else
-					projetarPonto3D(g, xPoints, yPoints, zPoints);
-			} else if (o.nome().startsWith("R")) {
-				if (o.getClass().getSimpleName().equals("Reta"))
-					clipparReta(g, xPoints, yPoints);
-				else
-					// Reta 3D
-					projetarReta3D(g, xPoints, yPoints, zPoints);
-			} else if (o.nome().startsWith("O")) {
-				if (clipping) {
-					clipparPoligono(g, xPoints, yPoints, o.preenchido());
+			if (o.nome().startsWith("S")) {
+				ArrayList<TipoObjeto> c1 = o.curva1();
+				ArrayList<TipoObjeto> c2 = o.curva2();
+
+				for (TipoObjeto crv : c1) {
+					ArrayList<CoordenadasHomogeneas> lCCurva = crv
+							.coordenadas();
+					g.setColor(o.cor());
+					double[] xPointsCurva = new double[lCCurva.size()];
+					double[] yPointsCurva = new double[lCCurva.size()];
+					double[] zPointsCurva = new double[lCCurva.size()];
+					for (CoordenadasHomogeneas c : lCCurva) {
+						xPointsCurva[lCCurva.indexOf(c)] = c.getXD();
+						yPointsCurva[lCCurva.indexOf(c)] = c.getYD();
+						zPointsCurva[lCCurva.indexOf(c)] = c.getZD();
+					}
+					clipparCurvas(g, xPointsCurva, yPointsCurva);
+				}
+
+				for (TipoObjeto crv : c2) {
+					ArrayList<CoordenadasHomogeneas> lCCurva = crv
+							.coordenadas();
+					g.setColor(o.cor());
+					double[] xPointsCurva = new double[lCCurva.size()];
+					double[] yPointsCurva = new double[lCCurva.size()];
+					double[] zPointsCurva = new double[lCCurva.size()];
+					for (CoordenadasHomogeneas c : lCCurva) {
+						xPointsCurva[lCCurva.indexOf(c)] = c.getXD();
+						yPointsCurva[lCCurva.indexOf(c)] = c.getYD();
+						zPointsCurva[lCCurva.indexOf(c)] = c.getZD();
+					}
+					clipparCurvas(g, xPointsCurva, yPointsCurva);
+				}
+
+			} else {
+				if (o.nome().startsWith("P")) {
+					if (o.getClass().getSimpleName().equals("Ponto")) {
+						clipparPonto(g, xPoints, yPoints, zPoints);
+					} else
+						projetarPonto3D(g, xPoints, yPoints, zPoints);
+				} else if (o.nome().startsWith("R")) {
+					if (o.getClass().getSimpleName().equals("Reta"))
+						clipparReta(g, xPoints, yPoints);
+					else
+						// Reta 3D
+						projetarReta3D(g, xPoints, yPoints, zPoints);
+				} else if (o.nome().startsWith("O")) {
+					if (clipping) {
+						if (o.nome().startsWith("O3D")) {
+							projetarPolignys3D(g, xPoints, yPoints, zPoints);
+						} else {
+							clipparPoligono(g, xPoints, yPoints, o.preenchido());
+						}
+					} else {
+						int[] xPointsT = new int[xPoints.length];
+						int[] yPointsT = new int[yPoints.length];
+
+						for (int j = 0; j < yPointsT.length; j++) {
+							xPointsT[j] = (int) new Transformadora()
+									.transVPx(xPoints[j]);
+							yPointsT[j] = (int) new Transformadora()
+									.transVPy(yPoints[j]);
+						}
+						g.drawPolygon(xPointsT, yPointsT, xPointsT.length);
+						if (o.preenchido()) {
+							g.fillPolygon(xPointsT, yPointsT, xPointsT.length);
+						}
+					}
+				} else if (clipping) {
+					clipparCurvas(g, xPoints, yPoints);
 				} else {
 					int[] xPointsT = new int[xPoints.length];
 					int[] yPointsT = new int[yPoints.length];
@@ -103,26 +159,11 @@ public class CanvasViewPort extends Canvas {
 								.transVPy(yPoints[j]);
 					}
 					g.drawPolygon(xPointsT, yPointsT, xPointsT.length);
-					if (o.preenchido()) {
-						g.fillPolygon(xPointsT, yPointsT, xPointsT.length);
-					}
+					g.drawPolyline(xPointsT, yPointsT, xPoints.length);
 				}
-			} else if (clipping) {
-				clipparCurvas(g, xPoints, yPoints);
-			} else {
-				int[] xPointsT = new int[xPoints.length];
-				int[] yPointsT = new int[yPoints.length];
-
-				for (int j = 0; j < yPointsT.length; j++) {
-					xPointsT[j] = (int) new Transformadora()
-							.transVPx(xPoints[j]);
-					yPointsT[j] = (int) new Transformadora()
-							.transVPy(yPoints[j]);
-				}
-				g.drawPolygon(xPointsT, yPointsT, xPointsT.length);
-				g.drawPolyline(xPointsT, yPointsT, xPoints.length);
 			}
 		}
+
 	}
 
 	private void projetarReta3D(Graphics g, double[] xPoints, double[] yPoints,
@@ -137,6 +178,7 @@ public class CanvasViewPort extends Canvas {
 		p1.set(1, 0, yPoints[0]);
 		p1.set(2, 0, zPoints[0]);
 		p1.set(3, 0, 1);
+
 		Matrix p2 = new Matrix(4, 1);
 		p2.set(0, 0, xPoints[1]);
 		p2.set(1, 0, yPoints[1]);
@@ -149,13 +191,8 @@ public class CanvasViewPort extends Canvas {
 		yPoints[0] = (int) (pW1.get(1, 0) / (pW1.get(2, 0) / d));
 		zPoints[0] = (int) (d);
 
-		xPoints[0] = (int) (pW1.get(0, 0));
-		yPoints[0] = (int) (pW1.get(1, 0));
-		zPoints[0] = (int) (pW1.get(2, 0));
-
 		Matrix pW2 = mper.times(p2);
-		System.out.println(pW2.get(2, 0));
-		System.out.println((pW2.get(0, 0) / (pW2.get(2, 0) / d)));
+
 		xPoints[1] = (int) (pW2.get(0, 0) / (pW2.get(2, 0) / d));
 		yPoints[1] = (int) (pW2.get(1, 0) / (pW2.get(2, 0) / d));
 		zPoints[1] = (int) (d);
@@ -163,12 +200,34 @@ public class CanvasViewPort extends Canvas {
 		clipparReta(g, xPoints, yPoints);
 	}
 
+	private void projetarPolignys3D(Graphics g, double[] xPoints,
+			double[] yPoints, double[] zPoints) {
+
+		// TODO Auto-generated method stub
+		double d = Math.abs(cop.getZ());
+		Matrix mper = new FabricaMatriz().matrizMper(d);
+
+		for (int i = 0; i < zPoints.length; i++) {
+			Matrix v = new Matrix(4, 1);
+			v.set(0, 0, xPoints[i]);
+			v.set(1, 0, yPoints[i]);
+			v.set(2, 0, zPoints[i]);
+			v.set(3, 0, 1);
+
+			Matrix vW = mper.times(v);
+			xPoints[i] = (int) (vW.get(0, 0) / (vW.get(2, 0) / d));
+			yPoints[i] = (int) (vW.get(1, 0) / (vW.get(2, 0) / d));
+			zPoints[i] = (int) (d);
+		}
+
+		clipparPoligono(g, xPoints, yPoints, false);
+	}
+
 	private void projetarPonto3D(Graphics g, double[] xPoints,
 			double[] yPoints, double[] zPoints) {
 		// TODO Auto-generated method stub
 		double d = Math.abs(cop.getZ());
 		Matrix mper = new FabricaMatriz().matrizMper(d);
-		System.out.println("velho x: " + xPoints[0] + " y: " + yPoints[0]);
 
 		Matrix p1 = new Matrix(4, 1);
 		p1.set(0, 0, xPoints[0]);
@@ -177,13 +236,6 @@ public class CanvasViewPort extends Canvas {
 		p1.set(3, 0, 1);
 
 		Matrix pW1 = mper.times(p1);
-		
-		for (int i = 0; i < pW1.getColumnDimension(); i++) {
-			for (int j = 0; j < pW1.getRowDimension(); j++) {
-				System.out.println(pW1.get(j, i));
-			}
-			System.out.println("");
-		}
 
 		xPoints[0] = (int) (pW1.get(0, 0) / (pW1.get(2, 0) / d));
 		yPoints[0] = (int) (pW1.get(1, 0) / (pW1.get(2, 0) / d));
@@ -288,7 +340,6 @@ public class CanvasViewPort extends Canvas {
 						yPointsT[k] = (int) new Transformadora()
 								.transVPy(pontos[1][k]);
 					}
-
 					g.drawPolyline(xPointsT, yPointsT, pontos[0].length);
 				}
 			}
@@ -337,9 +388,7 @@ public class CanvasViewPort extends Canvas {
 
 		double x = xPoints[0];
 		double y = yPoints[0];
-		System.out.println("lol 1");
 		if (areaDesenhavel.contains(x, y)) {
-			System.out.println("lol 2");
 			int xT = (int) transformadaViewPortX(x);
 			int yT = (int) transformadaViewPortY(y);
 			g.drawLine(xT, yT, xT, yT);

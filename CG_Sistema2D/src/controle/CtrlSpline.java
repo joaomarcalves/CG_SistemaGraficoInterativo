@@ -21,14 +21,14 @@ import modelo.SemiPonto;
 
 public class CtrlSpline implements ActionListener, KeyListener {
 
-	private JSlider m;
-	private JFrame framePai;
-	private JFrame frame;
-	private JPanel pnlPrincipal;
-	private JPanel pnlControle;
-	private JColorChooser corChooser;
-	private JButton btSpline;
-	private CtrlCriarSpline ctrlCriarSpline;
+	protected JSlider m;
+	protected JFrame framePai;
+	protected JFrame frame;
+	protected JPanel pnlPrincipal;
+	protected JPanel pnlControle;
+	protected JColorChooser corChooser;
+	protected JButton btSpline;
+	protected CtrlCriarSpline ctrlCriarSpline;
 
 	public CtrlSpline(JSlider m, JFrame frame) {
 		// TODO Auto-generated constructor stub
@@ -39,6 +39,8 @@ public class CtrlSpline implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		if (arg0.getKeyCode() == 10)
+			criarSpline();
 
 	}
 
@@ -57,6 +59,10 @@ public class CtrlSpline implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		criarSpline();
+	}
+
+	protected void criarSpline() {
 		int nPontos = m.getValue();
 		framePai.dispose();
 		frame = new JFrame();
