@@ -55,7 +55,6 @@ public class CtrlArquivo implements KeyListener, ActionListener {
 		InterpretadorObj inter = new InterpretadorObj(fc.getSelectedFile(),
 				cor.getColor(), Integer.parseInt(escal.getText()));
 		try {
-			System.out.println("Importando o arquivo "+fc.getSelectedFile().toString());
 			inter.criarObjetoObj();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

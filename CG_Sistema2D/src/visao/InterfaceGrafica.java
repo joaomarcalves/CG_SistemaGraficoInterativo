@@ -54,10 +54,9 @@ import controle.CtrlTamPasso;
 import controle.CtrlTrans3D;
 
 public class InterfaceGrafica extends JFrame implements WindowListener {
-
 	/**
-	 * 
-	 */
+*
+*/
 	private static final long serialVersionUID = 1L;
 	private static InterfaceGrafica instance;
 	private JLabel lblObjeto;
@@ -152,17 +151,15 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		// Criar controlador de configuração
 		ctrlTamPasso = new CtrlTamPasso();
 		ctrlClipping = new CtrlClipping();
-
 		// Criar a barra de menu
 		menuBarra = new JMenuBar();
-
 		// Construir o primeiro menu
 		menu = new JMenu("Configurações");
 		menu.setMnemonic(KeyEvent.VK_C);
 		menu.getAccessibleContext().setAccessibleDescription(
 				"Opções avançadas de configuração");
 		menuBarra.add(menu);
-		menuTamPasso = new JMenuItem("Tamanho dos Passos", KeyEvent.VK_P);
+		menuTamPasso = new JMenuItem("Preferencias", KeyEvent.VK_P);
 		menuTamPasso.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
 				ActionEvent.ALT_MASK));
 		menuTamPasso.addActionListener(ctrlTamPasso);
@@ -184,7 +181,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		ButtonGroup g2 = new ButtonGroup();
 		g2.add(menuBezier);
 		g2.add(menuSpline);
-
 		menu.add(menuTamPasso);
 		menu.addSeparator();
 		menu.add(menuAlgClipp);
@@ -195,7 +191,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		menuAlgClipp.add(menuCS);
 		menuAlgCurva.add(menuBezier);
 		menuAlgCurva.add(menuSpline);
-
 		// Características da tela principal
 		this.setJMenuBar(menuBarra);
 		this.addWindowListener(this);
@@ -210,17 +205,13 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlCentral = new JPanel();
 		pnlCentral.add(lblVP);
 		pnlCentral.add(canvas);
-
 		criarPainelDeWindow();
-
 		criarPainelDeTransformacao();
-
 		// Inclusão dos 3 paineis principais na tela
 		this.add("West", pnlEsq);
 		this.add("Center", pnlCentral);
 		this.add("East", pnlDir);
 		this.setVisible(true);
-
 		// Centralizando a window
 		Janela.getInstance().centralizar();
 	}
@@ -229,7 +220,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		// Criação dos campos necessários
 		entryGrausWin = new JTextField();
 		entryGrausWin.setText("90");
-
 		// Criação dos controladores de eventos
 		ctrlNav3D = new CtrlTrans3D();
 		ctrlCriarCurva = new CtrlCriarCurva();
@@ -245,14 +235,12 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		ctrlRotWin = new CtrlRotWin(entryGrausWin);
 		ctrlSelecTd = new CtrlSelecTd();
 		ctrlSpfBCubics = new CtrlSpfBCubics();
-
 		// Criação dos labels
 		lblObjeto = new JLabel("Display File", JLabel.CENTER);
 		// lblObjeto.setAlignmentX(0);
 		lblNav = new JLabel("Navegação da Janela", JLabel.CENTER);
 		lblZoom = new JLabel("Zoom da Janela", JLabel.CENTER);
 		lblRotWin = new JLabel("Rotacionar a Janela (º)", JLabel.CENTER);
-
 		// Criação dos botões e adição dos controladores
 		btObjeto3D = new JButton("Criar objeto 3D");
 		btSelecTudo = new JButton("Selecionar tudo");
@@ -268,7 +256,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		btMenos = new JButton("-");
 		btRotWin = new JButton("Rotacionar");
 		btCriarCurva = new JButton("Criar curva 2D");
-
 		btSpf3D.addActionListener(ctrlSpfBCubics);
 		btSpf3D.addKeyListener(ctrlSpfBCubics);
 		btSelecTudo.addActionListener(ctrlSelecTd);
@@ -301,7 +288,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		btDir.addActionListener(ctrlDir);
 		btDir.addKeyListener(ctrlDir);
 		btDir.setMnemonic(KeyEvent.VK_RIGHT);
-
 		// Criação do painel que contém os botões e campos para a manipulação da
 		// window e viewport
 		pnlEsq = new JPanel();
@@ -313,21 +299,18 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		pnlNav.add(btCima);
 		pnlNav.add(btBaixo);
 		pnlNav.add(btDir);
-
 		pnlZoom = new JPanel();
 		pnlZoom.setLayout(new GridLayout(1, 2));
 		pnlZoom.add(btMais);
 		pnlZoom.add(btMenos);
 		pnlEsq.add(lblObjeto);
 		pnlEsq.add(campoDeObjetos);
-
 		pnlCriarImportar.add(btObjeto3D);
 		pnlCriarImportar.add(btSpf3D);
 		pnlCriarImportar.add(btObjeto);
 		pnlCriarImportar.add(btCriarCurva);
 		pnlCriarImportar.add(btImportar);
 		pnlCriarImportar.add(btSelecTudo);
-
 		pnlEsq.add(pnlCriarImportar);
 		pnlEsq.add(lblNav);
 		pnlEsq.add(pnlNav);
@@ -358,7 +341,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		tipoRot.add(tipoY);
 		tipoRot.add(tipoZ);
 		tipoRot.add(tipoPonto);
-
 		// Criação dos controladores de eventos
 		ctrlEsqTrans = new CtrlEsqTrans();
 		ctrlCimaTrans = new CtrlCimaTrans();
@@ -368,14 +350,12 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		ctrlMenosEscal = new CtrlMenosEscal();
 		ctrlRot = new CtrlRot(entryGraus, tipoCentro, tipoOrigem, tipoPonto,
 				tipoX, tipoY, tipoZ, entryRotX, entryRotY);
-
 		// Criação dos labels
 		lblTrans = new JLabel("Translação do Objeto", JLabel.CENTER);
 		lblEscal = new JLabel("Escalonamento do Objeto", JLabel.CENTER);
 		lblRot = new JLabel("Rotação do Objeto (º)", JLabel.CENTER);
 		lblX = new JLabel("x", JLabel.CENTER);
 		lblY = new JLabel("y", JLabel.CENTER);
-
 		// Criação dos botões e adição dos controladores
 		btEsqTrans = new JButton("←");
 		btCimaTrans = new JButton("↑");
@@ -402,7 +382,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		btMenosEscal.addKeyListener(ctrlMenosEscal);
 		btRot.addActionListener(ctrlRot);
 		btRot.addKeyListener(ctrlRot);
-
 		// Criação do painel que contém os botões e campos para a transformação
 		// dos objetos
 		pnlDir = new JPanel();
@@ -452,52 +431,42 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("Fechando...");
 		System.exit(0);
-
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("Abrindo...");
-
 	}
 
 	public void exibirObjetos() {
 		// TODO Auto-generated method stub
 		int[] selecionados = campoDeObjetos.getSelectedIndexes();
-
 		campoDeObjetos.removeAll();
 		for (TipoObjeto o : Mundo.getInstance().objetos()) {
 			campoDeObjetos.add(o.nome() + " " + o.coordenadasString());
@@ -505,7 +474,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		for (int i = 0; i < selecionados.length; i++) {
 			campoDeObjetos.select(i);
 		}
-
 		this.desenharObjetos();
 	}
 
@@ -518,7 +486,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		// TODO Auto-generated method stub
 		Janela.getInstance().diminuir();
 		canvas.repaint();
-
 	}
 
 	public void aumentarTamanhoJanela() {
@@ -563,7 +530,6 @@ public class InterfaceGrafica extends JFrame implements WindowListener {
 		// TODO Auto-generated method stub
 		JOptionPane.showMessageDialog(null,
 				"Selecione um objeto na lista de objetos!");
-
 	}
 
 	public Clippins algoClipping() {

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public interface TipoObjeto {
-
 	String nome();
 
 	ArrayList<CoordenadasHomogeneas> coordenadas();

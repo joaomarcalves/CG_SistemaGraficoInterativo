@@ -75,7 +75,6 @@ public class CtrlCriarCurva implements KeyListener, ActionListener {
 
 	private void curvaSpline() {
 		// TODO Auto-generated method stub
-		System.out.println("Criando curva B-Spline");
 
 		frame = new JFrame();
 		frame.setLayout(new FlowLayout());

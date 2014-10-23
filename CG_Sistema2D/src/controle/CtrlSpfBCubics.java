@@ -19,8 +19,6 @@ public class CtrlSpfBCubics implements ActionListener, KeyListener {
 
 	private void criarSpfBCubics() {
 		// TODO Auto-generated method stub
-		System.out.println("Criando Superfície Bicubica B-Spline");
-
 		frame = new JFrame();
 		frame.setLayout(new FlowLayout());
 		frame.setSize(420, 120);

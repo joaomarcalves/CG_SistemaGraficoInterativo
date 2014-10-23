@@ -13,6 +13,7 @@ public class Janela {
 	private double anguloAtual;
 	private Reta vetorVertical;
 	private Reta vetorHorizontal;
+	private Ponto3D cop;
 
 	private Janela() {
 		int[] dim = Mundo.getInstance().dimensao();
@@ -24,6 +25,9 @@ public class Janela {
 		zMin = 0;
 		anguloAtual = 0;
 		criarVetoresReferencia();
+		ArrayList<CoordenadasHomogeneas> lcop = new ArrayList<CoordenadasHomogeneas>();
+		lcop.add(new CoordenadasHomogeneas(0, 0, -100));
+		cop = new Ponto3D("COP", lcop, null);
 	}
 
 	public static Janela getInstance() {
@@ -149,7 +153,7 @@ public class Janela {
 		lV.add(new CoordenadasHomogeneas(0, 0, 1));
 		lV.add(new CoordenadasHomogeneas(0, 10, 1));
 		vetorVertical = new Reta("vetor vertical", lV, null);
-		
+
 		ArrayList<CoordenadasHomogeneas> lH = new ArrayList<CoordenadasHomogeneas>();
 		lH.add(new CoordenadasHomogeneas(0, 0, 1));
 		lH.add(new CoordenadasHomogeneas(10, 0, 1));
@@ -159,16 +163,28 @@ public class Janela {
 		vetorVertical.rotacionarAoRedorPto(anguloAtual, "0", "0");
 		vetorHorizontal.rotacionarAoRedorPto(anguloAtual, "0", "0");
 	}
-	
-	public Reta getVetorVertical(){
+
+	public Reta getVetorVertical() {
 		return vetorVertical;
 	}
-	
-	public Reta getVetorHorizontal(){
+
+	public Reta getVetorHorizontal() {
 		return vetorHorizontal;
 	}
 
 	public double anguloAtual() {
 		return anguloAtual;
+	}
+
+	public Ponto3D getCOP() {
+		// TODO Auto-generated method stub
+		return cop;
+	}
+
+	public void setCOP(double copX, double copY, double copD) {
+		// TODO Auto-generated method stub
+		cop.setX(copX);
+		cop.setY(copY);
+		cop.setZ(copD);
 	}
 }

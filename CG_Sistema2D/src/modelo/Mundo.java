@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class Mundo implements TipoMundo {
-
 	private static TipoMundo instance;
 	private ArrayList<TipoObjeto> displayFile = new ArrayList<TipoObjeto>();
 	private int quantPts;
@@ -58,7 +57,6 @@ public class Mundo implements TipoMundo {
 		quantRts++;
 		displayFile.add(Objeto.criarReta(("R" + quantRts), coordenadas,
 				coordenadas2, cor));
-
 	}
 
 	@Override
@@ -87,7 +85,6 @@ public class Mundo implements TipoMundo {
 		quantCurv++;
 		displayFile.add(Objeto.criarCurvaBezier(("C" + quantCurv), listCord,
 				cor, numPontos));
-
 	}
 
 	public void incluirCurvaSpline(ArrayList<SemiPonto> listCord, Color cor) {
@@ -112,7 +109,6 @@ public class Mundo implements TipoMundo {
 		// TODO Auto-generated method stub
 		quantRts3D++;
 		displayFile.add(Objeto3D.criarReta(("R3D" + quantRts3D), c1, c2, cor));
-
 	}
 
 	@Override
@@ -122,7 +118,6 @@ public class Mundo implements TipoMundo {
 		quantPol3D++;
 		displayFile.add(Objeto3D.criarPoligono(("O3D" + quantPol3D), listCord,
 				cor, preenchido));
-
 	}
 
 	@Override
@@ -132,7 +127,6 @@ public class Mundo implements TipoMundo {
 		quantSpf++;
 		displayFile.add(Objeto3D.criarSpfSpline(("S" + quantSpf), curvasCtrl,
 				cor));
-
 	}
 
 	@Override
@@ -145,6 +139,5 @@ public class Mundo implements TipoMundo {
 			displayFile.add(Objeto3D.criarPoligono(("O3D" + quantPol3D), f,
 					cor, preenchido));
 		}
-
 	}
 }

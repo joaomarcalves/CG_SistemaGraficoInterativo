@@ -24,7 +24,6 @@ public class CtrlBaixoTrans implements ActionListener, KeyListener {
 		try {
 			int[] idxObjeto = InterfaceGrafica.getInstance().objetoAtivo();
 			for (int index : idxObjeto) {
-				System.out.println("Transladando o objeto "+Mundo.getInstance().objetos().get(index).nome()+" para baixo");
 				Mundo.getInstance().objetos().get(index)
 						.moverSe(Direcoes.BAIXO);
 			}

@@ -22,7 +22,6 @@ public class CtrlDirTrans implements KeyListener, ActionListener {
 			int[] idxObjeto = InterfaceGrafica.getInstance().objetoAtivo();
 
 			for (int index : idxObjeto) {
-				System.out.println("Transladando o obejto para direita");
 				Mundo.getInstance().objetos().get(index)
 						.moverSe(Direcoes.DIREITA);
 			}

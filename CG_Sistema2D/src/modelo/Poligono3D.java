@@ -11,4 +11,6 @@ public class Poligono3D extends Objeto3D implements TipoObjeto {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 }

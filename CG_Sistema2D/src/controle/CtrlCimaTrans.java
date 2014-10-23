@@ -22,7 +22,6 @@ public class CtrlCimaTrans implements KeyListener, ActionListener {
 			int[] idxObjeto = InterfaceGrafica.getInstance().objetoAtivo();
 
 			for (int index : idxObjeto) {
-				System.out.println("Transladando o objeto "+Mundo.getInstance().objetos().get(index).nome()+" para cima");
 				Mundo.getInstance().objetos().get(index).moverSe(Direcoes.CIMA);
 			}
 

@@ -4,25 +4,20 @@ import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import modelo.TipoClipador;
 import modelo.Transformadora;
 
 public class LiangBarsky implements TipoClipador {
-
 	private double[] xPoints;
 	private double[] yPoints;
-
 	double p1;
 	double p2;
 	double p3;
 	double p4;
-
 	double q1;
 	double q2;
 	double q3;
 	double q4;
-
 	private double[] pk;
 	private double[] qk;
 	private double[] zPoints;
@@ -32,7 +27,6 @@ public class LiangBarsky implements TipoClipador {
 
 	public LiangBarsky(double[] xPoints, double[] yPoints,
 			Polygon areaDesenhavel) {
-
 		this.areaDesenhavel = areaDesenhavel;
 		this.xPoints = xPoints;
 		this.yPoints = yPoints;
@@ -48,7 +42,6 @@ public class LiangBarsky implements TipoClipador {
 		q4 = (areaDesenhavel.getBounds().getMaxY() - yPoints[0]);
 		double[] qk = { q1, q2, q3, q4 };
 		this.qk = qk;
-
 	}
 
 	public LiangBarsky(double[] ds, double[] ds2, double[] ds3,
@@ -98,10 +91,8 @@ public class LiangBarsky implements TipoClipador {
 				r2k.add(qk[i] / pk[i]);
 			}
 		}
-
 		double zeta1 = Math.max(0, Collections.max(r1k));
 		double zeta2 = Math.min(1, Collections.min(r2k));
-
 		int nPoints = xPoints.length;
 		if ((zeta1 < zeta2) && clipping) {
 			if (zeta1 > 0 && zeta2 < 1) {
@@ -126,14 +117,12 @@ public class LiangBarsky implements TipoClipador {
 				xPoints[1] = (int) x;
 				yPoints[1] = (int) y;
 			}
-
 			int[] xPointsT = new int[2];
 			xPointsT[0] = (int) new Transformadora().transVPx(xPoints[0]);
 			xPointsT[1] = (int) new Transformadora().transVPx(xPoints[1]);
 			int[] yPointsT = new int[2];
 			yPointsT[0] = (int) new Transformadora().transVPy(yPoints[0]);
 			yPointsT[1] = (int) new Transformadora().transVPy(yPoints[1]);
-
 			g.drawPolygon(xPointsT, yPointsT, nPoints);
 		} else if (!clipping) {
 			int[] xPointsT = new int[2];
@@ -142,7 +131,6 @@ public class LiangBarsky implements TipoClipador {
 			int[] yPointsT = new int[2];
 			yPointsT[0] = (int) new Transformadora().transVPy(yPoints[0]);
 			yPointsT[1] = (int) new Transformadora().transVPy(yPoints[1]);
-
 			g.drawPolygon(xPointsT, yPointsT, nPoints);
 		}
 	}
@@ -178,7 +166,6 @@ public class LiangBarsky implements TipoClipador {
 		double zeta1 = Collections.max(r1k);
 		r2k.add(1.0);
 		double zeta2 = Collections.min(r2k);
-
 		int nPoints = xPoints.length;
 		if ((zeta1 < zeta2) && clipping) {
 			if (zeta1 > 0 && zeta2 >= 1) {
@@ -207,18 +194,14 @@ public class LiangBarsky implements TipoClipador {
 			double[][] pontos = { xPoints, yPoints };
 			return pontos;
 		} else if (!clipping) {
-
 			int[] xPointsT = new int[xPoints.length];
 			int[] yPointsT = new int[yPoints.length];
-
 			for (int i = 0; i < xPointsT.length; i++) {
 				xPointsT[i] = (int) new Transformadora().transVPx(xPoints[i]);
 				yPointsT[i] = (int) new Transformadora().transVPy(yPoints[i]);
 			}
-
 			g.drawPolygon(xPointsT, yPointsT, nPoints);
 		}
 		return null;
 	}
-
 }

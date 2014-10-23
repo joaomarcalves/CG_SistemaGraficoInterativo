@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public interface TipoMundo {
-
 	ArrayList<TipoObjeto> objetos();
 
 	void incluirObjeto(CoordenadasHomogeneas coordenadasHomogeneas, Color cor);
@@ -14,10 +13,11 @@ public interface TipoMundo {
 
 	int[] dimensao();
 
-	void incluirObjeto(CoordenadasHomogeneas c1, CoordenadasHomogeneas c2, Color cor);
+	void incluirObjeto(CoordenadasHomogeneas c1, CoordenadasHomogeneas c2,
+			Color cor);
 
-	void incluirCurvaBezier(ArrayList<CoordenadasHomogeneas> listCord, Color cor,
-			String numPontos);
+	void incluirCurvaBezier(ArrayList<CoordenadasHomogeneas> listCord,
+			Color cor, String numPontos);
 
 	void incluirCurvaSpline(ArrayList<SemiPonto> listCord, Color color);
 
@@ -35,5 +35,4 @@ public interface TipoMundo {
 	void incluirPoliedro(
 			ArrayList<ArrayList<CoordenadasHomogeneas>> listaDeFaces,
 			Color cor, boolean b);
-
 }

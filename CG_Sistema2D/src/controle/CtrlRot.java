@@ -49,10 +49,8 @@ public class CtrlRot implements KeyListener, ActionListener {
 
 	private void rotacionar() {
 		int[] idxObjeto = InterfaceGrafica.getInstance().objetoAtivo();
-		System.out.print("Rotacionar " + graus.getText() + "º ");
 		try {
 			if (eixoX.isSelected()) {
-				System.out.println("Rotação 3D em torno de X");
 				for (int index : idxObjeto) {
 					Mundo.getInstance().objetos().get(index)
 							.rotacionarSe(Double.parseDouble(graus.getText()),Eixo.X);
@@ -66,7 +64,6 @@ public class CtrlRot implements KeyListener, ActionListener {
 
 					} else {
 						if (centro.isSelected()) {
-							System.out.println("Em torno do seu centro");
 							for (int index : idxObjeto) {
 								Mundo.getInstance()
 										.objetos()
@@ -78,7 +75,6 @@ public class CtrlRot implements KeyListener, ActionListener {
 							InterfaceGrafica.getInstance().exibirObjetos();
 						} else {
 							if (origem.isSelected()) {
-								System.out.println("Em torno da origem");
 								for (int index : idxObjeto) {
 									Mundo.getInstance()
 											.objetos()
@@ -90,9 +86,7 @@ public class CtrlRot implements KeyListener, ActionListener {
 								InterfaceGrafica.getInstance().exibirObjetos();
 							} else {
 								if (pontoQqr.isSelected()) {
-									System.out.println("Em torno de um ponto ("
-											+ eX.getText() + ", "
-											+ eY.getText() + ")");
+									
 									for (int index : idxObjeto) {
 										Mundo.getInstance()
 												.objetos()

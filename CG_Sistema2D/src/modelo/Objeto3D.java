@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import Jama.Matrix;
 
 public class Objeto3D extends Objeto {
-
 	public Objeto3D(String nome, ArrayList<CoordenadasHomogeneas> listaCoord,
 			Color cor) {
 		super(nome, listaCoord, cor);
@@ -31,7 +30,6 @@ public class Objeto3D extends Objeto {
 		ArrayList<CoordenadasHomogeneas> listaCoord = new ArrayList<CoordenadasHomogeneas>();
 		listaCoord.add(coordenadas);
 		listaCoord.add(coordenadas2);
-
 		TipoObjeto r = new Reta3D(nome, listaCoord, cor);
 		r.rotacionarEmCoordWin(Janela.getInstance().anguloAtual(), Janela
 				.getInstance().centroWin());
@@ -51,18 +49,13 @@ public class Objeto3D extends Objeto {
 	@Override
 	public void escalonarSe(Escalonamento tipo) {
 		// TODO Auto-generated method stub
-
-		System.out.println("entrou");
-
 		double sX = 1, sY = 1, sZ = 1;
 		double cX = this.centro().getXD();
 		double cY = this.centro().getYD();
 		double cZ = this.centro().getZD();
-
 		double cXwin = this.centroWin().getXD();
 		double cYwin = this.centroWin().getYD();
 		double cZwin = this.centroWin().getZD();
-
 		switch (tipo) {
 		case AUMENTAR:
 			sX = 1.1;
@@ -75,31 +68,24 @@ public class Objeto3D extends Objeto {
 			sZ = 0.9;
 			break;
 		}
-
 		// Aplicando deslocamento para origem
 		FabricaMatriz m = new FabricaMatriz();
 		Matrix t1 = m.matrizTranslação(-cX, -cY, -cZ);
 		Matrix s = m.matrizEscalonamento(sX, sY, sZ);
 		Matrix t2 = m.matrizTranslação(-cX, -cY, -cZ);
-
 		Matrix t1Win = m.matrizTranslação(-cXwin, -cYwin, -cZwin);
 		Matrix t2Win = m.matrizTranslação(cXwin, cYwin, cZwin);
-
 		// Aplicando escalonamento
-
 		// Aplicando retorno para posição
-
 		Matrix coord = new Matrix(1, 4);
 		for (CoordenadasHomogeneas c : listaCoord) {
 			coord.set(0, 0, c.getXD());
 			coord.set(0, 1, c.getYD());
 			coord.set(0, 2, c.getZD());
 			coord.set(0, 3, 1.0);
-
 			Matrix resultado = coord.times(t1);
 			resultado = resultado.times(s);
 			resultado = resultado.times(t2);
-
 			c.setX(resultado.get(0, 0));
 			c.setY(resultado.get(0, 1));
 			c.setZ(resultado.get(0, 2));
@@ -109,11 +95,9 @@ public class Objeto3D extends Objeto {
 			coord.set(0, 1, cW.getYD());
 			coord.set(0, 2, cW.getZD());
 			coord.set(0, 3, 1.0);
-
 			Matrix resultado = coord.times(t1Win);
 			resultado = resultado.times(s);
 			resultado = resultado.times(t2Win);
-
 			cW.setX(resultado.get(0, 0));
 			cW.setY(resultado.get(0, 1));
 			cW.setZ(resultado.get(0, 2));
@@ -131,7 +115,6 @@ public class Objeto3D extends Objeto {
 		Matrix t2 = m.matrizTranslação(co.getXD(), co.getYD(), co.getZD());
 		Matrix t2Win = m
 				.matrizTranslação(coW.getXD(), coW.getYD(), coW.getZD());
-
 		Matrix coord = new Matrix(1, 4);
 		if (e == Eixo.X) {
 			for (CoordenadasHomogeneas c : listaCoord) {
@@ -139,32 +122,26 @@ public class Objeto3D extends Objeto {
 				coord.set(0, 1, c.getYD());
 				coord.set(0, 2, c.getZD());
 				coord.set(0, 3, 1.0);
-
 				Matrix resultado = coord.times(t1);
 				resultado = resultado.times(rx);
 				resultado = resultado.times(t2);
-
 				c.setX(resultado.get(0, 0));
 				c.setY(resultado.get(0, 1));
 				c.setZ(resultado.get(0, 2));
 			}
-
 			for (CoordenadasHomogeneas cW : listaCoordWin) {
 				coord.set(0, 0, cW.getXD());
 				coord.set(0, 1, cW.getYD());
 				coord.set(0, 2, cW.getZD());
 				coord.set(0, 3, 1.0);
-
 				Matrix resultado = coord.times(t1Win);
 				resultado = resultado.times(rx);
 				resultado = resultado.times(t2Win);
-
 				cW.setX(resultado.get(0, 0));
 				cW.setY(resultado.get(0, 1));
 				cW.setZ(resultado.get(0, 2));
 			}
 		}
-
 		if (e == null) {
 			// atualizarCoordenadaObjeto(t1, rx, ry, rz, t2, coord);
 			// atualizarCoordenadaJanela(t1Win, rx, ry, rz, t2Win, coord);
@@ -176,7 +153,6 @@ public class Objeto3D extends Objeto {
 		// TODO Auto-generated method stub
 		ArrayList<TipoObjeto> listaCurvas1 = new ArrayList<TipoObjeto>();
 		ArrayList<TipoObjeto> listaCurvas2 = new ArrayList<TipoObjeto>();
-
 		ArrayList<CoordenadasHomogeneas> listCoord = new ArrayList<CoordenadasHomogeneas>();
 		int[] passo = new int[curvasCtrl.size()];
 		for (int i = 0; i < curvasCtrl.size(); i++) {
@@ -193,10 +169,11 @@ public class Objeto3D extends Objeto {
 		for (int i = 0; i < listaCurvas1.size(); i++) {
 			for (int j = 0; j <= listaCurvas1.get(i).coordenadas().size(); j = j
 					+ passo[i]) {
-				lSPCP = new CoordenadasHomogeneas[listaCurvas1.size()][listaCurvas1.get(i).coordenadas().size()];
-				CoordenadasHomogeneas ptoParcial = listaCurvas1.get(i).coordenadas().get(j);
+				lSPCP = new CoordenadasHomogeneas[listaCurvas1.size()][listaCurvas1
+						.get(i).coordenadas().size()];
+				CoordenadasHomogeneas ptoParcial = listaCurvas1.get(i)
+						.coordenadas().get(j);
 				// rever
-				
 				for (int k = 0; k < listaCurvas1.size(); k++) {
 					listaSPCurvaParcial.get(i).add(k, ptoParcial);
 				}
@@ -229,24 +206,17 @@ public class Objeto3D extends Objeto {
 		double[] deltaF0 = new double[3];
 		double[] delta2F0 = new double[3];
 		double[] delta3F0 = new double[3];
-
 		FabricaMatriz ma = new FabricaMatriz();
-
 		Matrix gbs = ma.matrizGBS();
-
 		ArrayList<CoordenadasHomogeneas> ptsCurva = new ArrayList<CoordenadasHomogeneas>();
-
 		for (int i = 0; i < listCoord.size() - 3; i++) {
 			for (int j = 0; j < matrizGeo.getRowDimension(); j++) {
 				matrizGeo.set(j, 0, listCoord.get(j + i).getXD());
 				matrizGeo.set(j, 1, listCoord.get(j + i).getYD());
 				matrizGeo.set(j, 2, listCoord.get(j + i).getZD());
 			}
-
 			Matrix coef = gbs.times(matrizGeo);
-
 			double delta = (1.0 / DIVISOES);
-
 			for (int k = 0; k < 3; k++) {
 				f0[k] = coef.get(3, k);
 				deltaF0[k] = coef.get(0, k) * (Math.pow(delta, 3))
@@ -255,13 +225,10 @@ public class Objeto3D extends Objeto {
 				delta2F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3)) + 2
 						* coef.get(1, k) * (Math.pow(delta, 2));
 				delta3F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3));
-
 			}
-
 			CoordenadasHomogeneas p = listCoord.get(i);
 			ArrayList<CoordenadasHomogeneas> ptsSegCurva = forwardDiferencies(
 					p, f0, deltaF0, delta2F0, delta3F0);
-
 			for (CoordenadasHomogeneas c : ptsSegCurva) {
 				ptsCurva.add(c);
 			}
@@ -283,24 +250,17 @@ public class Objeto3D extends Objeto {
 		double[] deltaF0 = new double[3];
 		double[] delta2F0 = new double[3];
 		double[] delta3F0 = new double[3];
-
 		FabricaMatriz ma = new FabricaMatriz();
-
 		Matrix gbs = ma.matrizGBS();
-
 		ArrayList<CoordenadasHomogeneas> ptsCurva = new ArrayList<CoordenadasHomogeneas>();
-
 		for (int i = 0; i < listCoord.size() - 3; i++) {
 			for (int j = 0; j < matrizGeo.getRowDimension(); j++) {
 				matrizGeo.set(j, 0, listCoord.get(j + i).getXD());
 				matrizGeo.set(j, 1, listCoord.get(j + i).getYD());
 				matrizGeo.set(j, 2, listCoord.get(j + i).getZD());
 			}
-
 			Matrix coef = gbs.times(matrizGeo);
-
 			double delta = (1.0 / DIVISOES);
-
 			for (int k = 0; k < 3; k++) {
 				f0[k] = coef.get(3, k);
 				deltaF0[k] = coef.get(0, k) * (Math.pow(delta, 3))
@@ -309,18 +269,14 @@ public class Objeto3D extends Objeto {
 				delta2F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3)) + 2
 						* coef.get(1, k) * (Math.pow(delta, 2));
 				delta3F0[k] = 6 * coef.get(0, k) * (Math.pow(delta, 3));
-
 			}
-
 			CoordenadasHomogeneas p = listCoord.get(i);
 			ArrayList<CoordenadasHomogeneas> ptsSegCurva = forwardDiferencies(
 					p, f0, deltaF0, delta2F0, delta3F0);
-
 			for (CoordenadasHomogeneas c : ptsSegCurva) {
 				ptsCurva.add(c);
 			}
 		}
 		return ptsCurva;
 	}
-
 }

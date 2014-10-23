@@ -41,7 +41,6 @@ public class CtrlBaixo implements ActionListener, KeyListener {
 
 	private void moverBaixo() {
 		// TODO Auto-generated method stub
-		System.out.println("Movendo a janela para baixo");
 		InterfaceGrafica.getInstance().moverJanela(Direcoes.BAIXO);
 
 	}

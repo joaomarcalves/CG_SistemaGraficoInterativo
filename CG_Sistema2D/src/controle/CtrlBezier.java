@@ -60,7 +60,6 @@ public class CtrlBezier implements KeyListener, ActionListener {
 				"1"));
 		listCord.add(new CoordenadasHomogeneas(pX4.getText(), pY4.getText(),
 				"1"));
-		System.out.println();
 
 		Mundo.getInstance().incluirCurvaBezier(listCord, corChooser.getColor(),
 				numPontos.getText());

@@ -49,7 +49,6 @@ public class CtrlRotWin implements ActionListener, KeyListener {
 
 	private void rotacionar() {
 		// TODO Auto-generated method stub
-		System.out.println("Rotacionar janela " + graus.getText()+"º");
 		Janela.getInstance().rotacionar(Double.parseDouble(graus.getText()));
 		InterfaceGrafica.getInstance().exibirObjetos();
 	}

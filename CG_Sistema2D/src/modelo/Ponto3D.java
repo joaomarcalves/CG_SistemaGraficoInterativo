@@ -9,7 +9,8 @@ public class Ponto3D extends Objeto3D implements TipoObjeto {
 	private double y;
 	private double z;
 
-	public Ponto3D(String nome, ArrayList<CoordenadasHomogeneas> listaCoord, Color cor) {
+	public Ponto3D(String nome, ArrayList<CoordenadasHomogeneas> listaCoord,
+			Color cor) {
 		super(nome, listaCoord, cor);
 		x = listaCoord.get(0).getXD();
 		y = listaCoord.get(0).getYD();
@@ -27,5 +28,17 @@ public class Ponto3D extends Objeto3D implements TipoObjeto {
 
 	public double getZ() {
 		return z;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
+	public void setZ(double z) {
+		this.z = z;
 	}
 }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class Superficie extends Objeto3D implements TipoObjeto {
-
 	private ArrayList<TipoObjeto> listaCurva1;
 	private ArrayList<TipoObjeto> listaCurva2;
 
@@ -22,14 +21,12 @@ public class Superficie extends Objeto3D implements TipoObjeto {
 
 	public String coordenadasString() {
 		String cS = "";
-
 		for (TipoObjeto t : listaCurva1) {
 			for (CoordenadasHomogeneas c : t.coordenadas()) {
 				cS = cS + "(" + c.getXD() + ", " + c.getYD() + ", " + c.getZD()
 						+ ") ";
 			}
 		}
-
 		for (TipoObjeto t : listaCurva2) {
 			for (CoordenadasHomogeneas c : t.coordenadas()) {
 				cS = cS + "(" + c.getXD() + ", " + c.getYD() + ", " + c.getZD()
@@ -46,5 +43,4 @@ public class Superficie extends Objeto3D implements TipoObjeto {
 	public ArrayList<TipoObjeto> curva2() {
 		return listaCurva2;
 	}
-
 }
